@@ -10,6 +10,7 @@ export const VerticalNavBarContainer = styled(animated.div)`
   flex-direction: column;
   justify-content: space-between;
   z-index: 30;
+  border-radius: 1rem;
 `;
 
 export const NavWrapper = styled.div`
@@ -17,6 +18,7 @@ export const NavWrapper = styled.div`
   flex-direction: row;
   min-height: 100vh;
   width: 100%;
+  font-family: 'Poppins';
 
   ${VerticalNavBarContainer} {
     position: sticky;
@@ -37,6 +39,7 @@ export const Menu = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 0 0.75rem;
+  gap: 2rem;
 `;
 
 export const Links = styled.div`
@@ -55,7 +58,7 @@ export const Divider = styled.div`
 `;
 
 const FocusedMenuItemCss = css`
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.2);
 `;
 
 export const MenuItem = styled.button<{ $focused?: boolean }>`
@@ -64,8 +67,7 @@ export const MenuItem = styled.button<{ $focused?: boolean }>`
 
   background-color: transparent;
   border: none;
-
-  color: red;
+  width: 100%;
 
   display: flex;
   flex-direction: row;
@@ -76,7 +78,7 @@ export const MenuItem = styled.button<{ $focused?: boolean }>`
   border-radius: 0.5rem;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.4);
   }
 
   ${(p) => p.$focused && FocusedMenuItemCss}
@@ -127,4 +129,35 @@ export const MenuItemText = styled.p`
 
 export const MenuSubItemText = styled(MenuItemText)`
   font-size: 1.2rem;
+`;
+
+export const Logo = styled(animated.div)`
+  padding: 0 0.6rem;
+  padding-left: 1.5rem;
+  margin: 0 0.75rem;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #EE504F;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+`;
+
+export const LogoImg = styled.img`
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+`;
+
+export const Button = styled.button`
+  background: #EE504F;
+  border-radius: 8px;
+  padding: 0.5rem 2rem;
+  font-family: 'Poppins';
+  color: white;
+  font-size: 1.5rem;
+  border: none;
 `;
