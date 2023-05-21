@@ -71,7 +71,7 @@ export const Title = styled.div`
   flex-direction: row;
   align-items: center;
   padding: 0px;
-  width: 115px;
+  width: 100%;
   height: 23px;
 `;
 
@@ -103,13 +103,14 @@ export const ContainerDescription = styled.div`
 export const Description = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
 `;
 
 export const DescIcon = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-right: 2px;
 `;
 
 export const TextDescription = styled.span`
@@ -117,5 +118,4 @@ export const TextDescription = styled.span`
   font-style: normal;
   font-size: 12px;
   color: #7e8392;
-  margin-left: 3px;
 `;

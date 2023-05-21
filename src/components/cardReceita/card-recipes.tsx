@@ -57,7 +57,11 @@ const CardReceipe: React.FC<CardProps> = ({ name, img, portions }) => {
               <DescIcon>
                 <Icon component={Restaurant} style={{ fontSize: 10 }} />
               </DescIcon>
-              <TextDescription>{portions + "  porções"}</TextDescription>
+              {portions > 1 ? (
+                <TextDescription>{portions + "  porções"}</TextDescription>
+              ) : (
+                <TextDescription>{portions + "  porção"}</TextDescription>
+              )}
             </Description>
           </ContainerDescription>
         </Footer>
