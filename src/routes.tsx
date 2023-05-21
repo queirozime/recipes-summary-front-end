@@ -1,9 +1,12 @@
 import { createBrowserRouter } from 'react-router-dom'
-import RecipesPage from './pages/recipes-page';
+import RecipesPage from './pages/Recipes/recipes-page';
+import UserPage from './pages/User/user-page';
+import ListsPage from './pages/Lists/lists-page';
+import CurrentList from './pages/CurrentList/current-list';
 
 export const router = createBrowserRouter([
     { path: '/', element: <RecipesPage /> },
-    { path: '/about', element: <div>2</div> },
-    { path: '/contact', element: <div>3</div> },
-    { path: '/login', element: <div>4</div> },
+    { path: '/user', element: <UserPage /> },
+    { path: '/lists', element: <ListsPage /> },
+    { path: '/current-list', element: <CurrentList /> },
 ]);

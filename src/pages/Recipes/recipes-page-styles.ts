@@ -8,12 +8,13 @@ export const Container = styled.div`
   padding: 0 2.5rem;
 `;
 
-export const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 1.5rem;
+export const Header = styled.div `
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
 `;
 
 export const Body = styled.div`
@@ -21,4 +22,9 @@ export const Body = styled.div`
   align-items: center;
   width: 100%;
   flex-wrap: wrap;
+`;
+
+export const PageTitle = styled.div`
+    font-size: 2.5rem;
+    font-weight: 900;
 `;
