@@ -160,4 +160,8 @@ export const Button = styled.button`
   color: white;
   font-size: 1.5rem;
   border: none;
+  cursor: pointer;
+  &:hover {
+    filter: brightness(0.8);
+  }
 `;

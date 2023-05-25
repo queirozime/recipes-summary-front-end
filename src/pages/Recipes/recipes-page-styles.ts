@@ -5,7 +5,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 0 2.5rem;
+  padding: 0 6.5rem;
 `;
 
 export const Header = styled.div `
