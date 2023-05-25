@@ -18,10 +18,18 @@ import { Check, StarBorder, Star, Restaurant } from "@material-ui/icons";
 interface CardProps {
   name: string;
   img: string;
-  portions: number;
+  portions: string;
+  id: string;
+  handleShow: (id: string) => void;
 }
 
-const CardReceipe: React.FC<CardProps> = ({ name, img, portions }) => {
+const CardRecipe: React.FC<CardProps> = ({
+  name,
+  img,
+  portions,
+  id,
+  handleShow,
+}) => {
   const [isFav, setIsFav] = useState(false);
   return (
     <CardContainer>
@@ -31,7 +39,11 @@ const CardReceipe: React.FC<CardProps> = ({ name, img, portions }) => {
             <Icon component={Check} style={{ color: "white", fontSize: 15 }} />
           </AddButton>
         </ImageBackground>
-        <Footer>
+        <Footer
+          onClick={() => {
+            handleShow(id);
+          }}
+        >
           <ContainerDescription>
             <Title>
               <TextTitle>{name}</TextTitle>
@@ -57,7 +69,7 @@ const CardReceipe: React.FC<CardProps> = ({ name, img, portions }) => {
               <DescIcon>
                 <Icon component={Restaurant} style={{ fontSize: 10 }} />
               </DescIcon>
-              {portions > 1 ? (
+              {Number(portions) > 1 ? (
                 <TextDescription>{portions + "  porções"}</TextDescription>
               ) : (
                 <TextDescription>{portions + "  porção"}</TextDescription>
@@ -70,4 +82,4 @@ const CardReceipe: React.FC<CardProps> = ({ name, img, portions }) => {
   );
 };
 
-export default CardReceipe;
+export default CardRecipe;
