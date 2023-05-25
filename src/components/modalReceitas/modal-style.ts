@@ -29,7 +29,7 @@ export const Header = styled.div`
   background: #f2f2f2;
   width: 100%;
   height: 50%;
-  border-radius: 10px 0;
+  border-radius: 10px 10px 0 0;
 `;
 
 export const HeaderColumns = styled.div`
