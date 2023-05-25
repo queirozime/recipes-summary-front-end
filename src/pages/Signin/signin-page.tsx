@@ -12,7 +12,8 @@ const SigninPage = () => {
   const initialValues = {
     name: "",
     email: "",
-    password: ""
+    password1: "",
+    password2:""
   };
 
   const validationSchema = Yup.object().shape({
@@ -20,10 +21,18 @@ const SigninPage = () => {
     email: Yup.string()
       .email("Email inválido")
       .required("Campo obrigatório"),
-    password: Yup.string().required("Campo obrigatório")
+    password1: Yup.string().required("Campo obrigatório"),
+    password2: Yup.string().required("Campo obrigatório")
   });
   const navigate = useNavigate();
-
+  const handleClick = (values:typeof initialValues) =>{
+      if(values.password1 === values.password2){
+        registerWithEmailAndPassword(values.name, values.email, values.password1,navigate);
+      }
+      else{
+        alert("Senhas diferentes");
+      }
+  };
   return (
     <Container>
       <SigninPageContainer>
@@ -42,15 +51,19 @@ const SigninPage = () => {
                   <Mail />
                   <FormikField type="email" name="email" placeholder="E-mail" />
                 </div>
-
                 <div>
                   <Lock />
-                  <FormikField type="password" name="password" placeholder="Senha" />
+                  <FormikField type="password" name="password1" placeholder="Digite Senha" />
                 </div>
+                <div>
+                  <Lock />
+                  <FormikField type="password" name="password1" placeholder="Digite novamente" />
+                </div>
+                
 
               </FormContainer>
 
-              <Button type="submit" onClick={() => registerWithEmailAndPassword(values.name, values.email, values.password,navigate)}>Register</Button>
+              <Button type="submit" onClick={()=>handleClick(values)}>Register</Button>
             </Form>
           )}
         </Formik>
