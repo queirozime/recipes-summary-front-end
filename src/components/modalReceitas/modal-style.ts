@@ -1,121 +1,141 @@
 import styled, { css } from "styled-components";
-import { DetailedHTMLProps, HTMLAttributes } from "react";
 
-export const CardContainer = styled.div`
+export const Background = styled.button`
+  position: fixed;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0, 0, 0, 0.5);
+`;
+
+export const Modal = styled.div`
+  position: fixed;
+  z-index: 1;
+  width: 61%;
+  height: 70%;
+  background-color: #fff;
+  margin-top: 9%;
   display: flex;
   flex-direction: column;
-  flex-basis: 33%;
-  margin-top: 10px;
-  width: 266px;
-  height: 202px;
-`;
-
-export const Card = styled.div`
-  margin-top: 10px;
-  width: 266px;
-  height: 202px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-`;
-
-interface ImageBackgroundProps
-  extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  url?: string;
-}
-
-export const ImageBackground = styled.div<ImageBackgroundProps>`
-  display: flex;
-  justify-content: flex-end;
-  width: 290px;
-  height: 133px;
-  background: url(${(props) => props.url}), #a5a5a5;
-  background-size: cover;
-  background-position: center;
-
-  border-radius: 16px 16px 0 0;
-`;
-
-export const AddButton = styled.button`
-  display: flex;
-  justify-content: center;
   align-items: center;
-  width: 24px;
-  height: 23px;
-  background: white;
-  margin-top: 10px;
-  margin-right: 15px;
-  box-shadow: 0px 7px 15px rgba(254, 114, 76, 0.4);
-  border-radius: 21px;
-
-  &:active {
-    background-color: #029094;
-  }
+  border-radius: 10px;
 `;
 
-export const Footer = styled.div`
+export const Header = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  background: #f2f2f2;
+  width: 100%;
+  height: 50%;
+  border-radius: 10px 0;
+`;
+
+export const HeaderColumns = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 8px 12px 18px;
-  gap: 10px;
-
-  width: 266px;
-  height: 40px;
-
-  background: #fcf5dd;
-
-  border-radius: 0 0 16px 16px;
+  justify-content: space-around;
+  border-radius: 2%;
 `;
-
-export const Title = styled.div`
+export const HeaderColumn = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
-  padding: 0px;
-  width: 100%;
-  height: 23px;
-`;
-
-export const TextTitle = styled.span`
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 15px;
-  color: #000000;
-  flex-grow: 0;
-`;
-
-export const FavIcon = styled.button`
-  display: flex;
+  align-items: space-around;
   justify-content: center;
-  align-items: center;
-  width: 18px;
-  height: 17px;
-  background: transparent;
-  border-width: 0px;
-  padding: 0px;
+  margin-top: 5%;
 `;
-
-export const ContainerDescription = styled.div`
-  width: 252px;
-  height: 57px;
-`;
-
-export const Description = styled.div`
+export const HeaderText = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
+  border-radius: 2%;
 `;
 
-export const DescIcon = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-right: 2px;
-`;
-
-export const TextDescription = styled.span`
+export const Text = styled.label`
   font-family: "Poppins";
   font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  /* identical to box height */
+
+  color: #000000;
+`;
+
+export const HeaderTitle = styled.p`
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 60px;
+
+  color: #000000;
+`;
+
+export const Image = styled.img`
+  max-width: 70%;
+  max-height: 70%;
+  width: auto;
+  height: auto;
+`;
+export const ContainerInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+export const Ingredientes = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
   font-size: 12px;
-  color: #7e8392;
+  list-style-type: disc;
+`;
+
+export const Preparo = styled.ul`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  max-width: 70%;
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  list-style-type: decimal;
+`;
+
+export const Title = styled.p`
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 22px;
+
+  color: #000000;
+`;
+
+export const Button = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 10%;
+  max-height: 10%;
+  background: #ee504f;
+  border-radius: 8px;
+  padding: 0.5rem 2rem;
+  font-family: "Poppins";
+  color: white;
+  font-size: 0.5rem;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    filter: brightness(0.8);
+  }
 `;
