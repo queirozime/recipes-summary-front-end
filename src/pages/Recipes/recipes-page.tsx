@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { Button, NavWrapper } from "../../components/Navbar/nav-styles";
@@ -93,6 +92,7 @@ const RecipesPage = () => {
     <NavWrapper>
       <VerticalNavbar />
       <Container>
+        <ModalRecipe handleClose={handleClose} />
         <Header>
           <PageTitle>Receitas</PageTitle>
           <Button>Adicionar</Button>
@@ -112,7 +112,6 @@ const RecipesPage = () => {
             );
           })}
         </Body>
-        <ModalRecipe handleClose={handleClose} />
       </Container>
     </NavWrapper>
   );
