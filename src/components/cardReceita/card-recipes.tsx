@@ -21,6 +21,7 @@ interface CardProps {
   portions: string;
   id: string;
   handleShow: (id: string) => void;
+  handleClose: () => void;
 }
 
 const CardRecipe: React.FC<CardProps> = ({
@@ -29,6 +30,7 @@ const CardRecipe: React.FC<CardProps> = ({
   portions,
   id,
   handleShow,
+  handleClose,
 }) => {
   const [isFav, setIsFav] = useState(false);
   return (
@@ -40,7 +42,7 @@ const CardRecipe: React.FC<CardProps> = ({
           </AddButton>
         </ImageBackground>
         <Footer
-          onClick={() => {
+          onClick={(event) => {
             handleShow(id);
           }}
         >
@@ -49,13 +51,14 @@ const CardRecipe: React.FC<CardProps> = ({
               <TextTitle>{name}</TextTitle>
               <FavIcon
                 onClick={() => {
+                  handleClose();
                   setIsFav(!isFav);
                 }}
               >
                 {isFav ? (
                   <Icon
                     component={Star}
-                    style={{ color: "red", fontSize: 15 }}
+                    style={{ color: "#ECDD58", fontSize: 15 }}
                   />
                 ) : (
                   <Icon

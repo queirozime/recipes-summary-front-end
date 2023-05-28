@@ -10,8 +10,8 @@ export const Container = styled.div`
 
 export const Header = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   width: 100%;
   margin-bottom: 1.5rem;
   margin-top: 1.5rem;
@@ -27,4 +27,11 @@ export const Body = styled.div`
 export const PageTitle = styled.div`
   font-size: 2.5rem;
   font-weight: 900;
+`;
+
+export const PageSubTitle = styled.label`
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.5rem;
 `;
