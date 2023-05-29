@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 
 export const Background = styled.button`
   position: fixed;
-  z-index: 0;
+  z-index: 1;
   width: 100%;
   height: 100%;
   background-color: rgb(0, 0, 0, 0.5);
@@ -10,7 +10,7 @@ export const Background = styled.button`
 
 export const Modal = styled.div`
   position: fixed;
-  z-index: 1;
+  z-index: 100;
   width: 61%;
   height: 70%;
   background-color: #fff;

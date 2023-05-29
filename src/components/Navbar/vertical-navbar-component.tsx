@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import * as easings from 'd3-ease';
 import { useSpring } from '@react-spring/web';
 import { useNavigate } from "react-router-dom";
-import { AccountCircle, Book, FormatListBulleted, LocalDining } from '@material-ui/icons'
+import { AccountCircle, FormatListBulleted, LocalDining } from '@material-ui/icons'
 import { Icon, Logo, Menu, MenuItem, MenuSubItemText, Section, VerticalNavBarContainer } from "./nav-styles";
 import { BrandIcon } from "../../assets/icons";
 
@@ -60,16 +60,6 @@ const VerticalNavbar: React.FC = () => {
                 >
                   <Icon> <FormatListBulleted /> </Icon>
                   <MenuSubItemText>{'Listas'}</MenuSubItemText>
-                </MenuItem>
-                <MenuItem
-                  as="button"
-                  onClick={() => {
-                    navigate('/current-list')
-                  }}
-                  $focused={isSelected('/current-list')}
-                >
-                  <Icon> <Book /> </Icon>
-                  <MenuSubItemText>{'Lista Atual'}</MenuSubItemText>
                 </MenuItem>
               </Menu>
             </Section>

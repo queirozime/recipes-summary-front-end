@@ -5,11 +5,17 @@ import { IconedPage } from "../../assets/icons";
 import { Button } from "../../components/Navbar/nav-styles";
 import { Container, FormContainer, LoginPageContainer, Page, PageDescription, FormikField } from "./login-page.styles";
 import { Lock, Mail } from "@material-ui/icons";
-import { logInWithEmailAndPassword } from "../../firebase";
 import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 
 
 const LoginPage = () => {
+  const auth = getAuth();
+
+  interface FormValues {
+    email: string;
+    password: string;
+  }
   const initialValues = {
     email: "",
     password: ""
@@ -22,6 +28,15 @@ const LoginPage = () => {
     password: Yup.string().required("Campo obrigatório")
   });
 
+  const handleSubmit = async (values: FormValues) => {
+    try{
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      navigate("/");
+    }catch(e) {
+      alert("Erro ao fazer login");
+    }
+  } 
+
   return (
     <Container>
       <LoginPageContainer>
@@ -29,7 +44,7 @@ const LoginPage = () => {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={() => console.log('sent')}>
+          onSubmit={handleSubmit}>
           {({ values }) =>
             <Form>
               <FormContainer>
@@ -42,8 +57,14 @@ const LoginPage = () => {
                   <Lock />
                   <FormikField type="password" name="password" placeholder="Senha" />
                 </div>
+                <Button type="submit">Login</Button>
+                <p style={{ fontSize: '1rem'}}> 
+                  Não tem conta?
+                  <a href="/signin">
+                    Cadastre-se
+                  </a> 
+                </p>
               </FormContainer>
-              <Button type="submit" onClick={() => logInWithEmailAndPassword(values.email, values.password, navigate)}>Login</Button>
             </Form>
           }
         </Formik>
