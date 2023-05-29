@@ -5,12 +5,13 @@ export const Container = styled.div`
     flex-direction: column;
     background: #F6F6F6;
     border-radius: 10px;
-    max-width: 300px;
+    max-width: 200px;
     padding: 1rem;
     cursor: pointer;
     &: hover {
         filter: brightness(0.9);
     }
+    aspect-ratio: 1/1;
 `;
 
 export const ListDescription = styled.div`

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import * as easings from 'd3-ease';
 import { useSpring } from '@react-spring/web';
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "react-query";
 import { AccountCircle, FormatListBulleted, LocalDining } from '@material-ui/icons'
 import { Icon, Logo, Menu, MenuItem, MenuSubItemText, Section, VerticalNavBarContainer } from "./nav-styles";
 import { BrandIcon } from "../../assets/icons";
@@ -11,6 +12,7 @@ const VerticalNavbar: React.FC = () => {
     const MIN_WIDTH = 15
     const [isOpen, setIsOpen] = useState(false)
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     
     const isSelected = (page: string) => {
       return window.location.pathname === page
@@ -33,8 +35,9 @@ const VerticalNavbar: React.FC = () => {
               <Menu>
                 <MenuItem
                   as="button"
-                  onClick={() => {
+                  onClick={async () => {
                     navigate('/user')
+                    await queryClient.invalidateQueries('LIST');
                   }}
                   $focused={isSelected('/user')}
                 >
@@ -43,8 +46,9 @@ const VerticalNavbar: React.FC = () => {
                 </MenuItem>
                 <MenuItem
                   as="button"
-                  onClick={() => {
+                  onClick={async () => {
                     navigate('/')
+                    await queryClient.invalidateQueries('LIST');
                   }}
                   $focused={isSelected('/')}
                 >
@@ -53,8 +57,9 @@ const VerticalNavbar: React.FC = () => {
                 </MenuItem>
                 <MenuItem
                   as="button"
-                  onClick={() => {
+                  onClick={async () => {
                     navigate('/lists')
+                    await queryClient.invalidateQueries('LIST');
                   }}
                   $focused={isSelected('/lists')}
                 >

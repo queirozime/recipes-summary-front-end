@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useQuery } from "react-query";
 import ListCard from "../../components/ListCard/list-card-component";
 import { NavWrapper } from "../../components/Navbar/nav-styles";
 import VerticalNavbar from "../../components/Navbar/vertical-navbar-component";
 import { Body, Container, Header, PageTitle } from "../Recipes/recipes-page-styles";
+import api from "../../http-client";
 
 const ListsPage = () => {
     interface List {
@@ -18,148 +20,157 @@ const ListsPage = () => {
             setSelectedListsIds([...selectedListsIds, list.id]);
         }
     }
-    const lists = [
-        {
-            name: 'Lista 1',
-            id: '1',
-            recipes: [
-                {
-                    id: 1,
-                    name: 'recipe1',
-                    description: 'recipe1',
-                    portions: 1,
-                    ingredients: [
-                        {
-                            id: 1,
-                            name: 'ingredient1',
-                            quantity: 1,
-                            unity: 'kg'
-                        },
-                    ],
-                }
-            ]
+    // const lists = [
+    //     {
+    //         name: 'Lista 1',
+    //         id: '1',
+    //         recipes: [
+    //             {
+    //                 id: 1,
+    //                 name: 'recipe1',
+    //                 description: 'recipe1',
+    //                 portions: 1,
+    //                 ingredients: [
+    //                     {
+    //                         id: 1,
+    //                         name: 'ingredient1',
+    //                         quantity: 1,
+    //                         unity: 'kg'
+    //                     },
+    //                 ],
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         name: 'Lista 1',
+    //         id: '2',
+    //         recipes: [
+    //             {
+    //                 id: 1,
+    //                 name: 'recipe1',
+    //                 description: 'recipe1',
+    //                 portions: 1,
+    //                 ingredients: [
+    //                     {
+    //                         id: 1,
+    //                         name: 'ingredient1',
+    //                         quantity: 1,
+    //                         unity: 'kg'
+    //                     },
+    //                 ],
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         name: 'Lista 1',
+    //         id: '3',
+    //         recipes: [
+    //             {
+    //                 id: 1,
+    //                 name: 'recipe1',
+    //                 description: 'recipe1',
+    //                 portions: 1,
+    //                 ingredients: [
+    //                     {
+    //                         id: 1,
+    //                         name: 'ingredient1',
+    //                         quantity: 1,
+    //                         unity: 'kg'
+    //                     },
+    //                 ],
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         name: 'Lista 1',
+    //         id: '4',
+    //         recipes: [
+    //             {
+    //                 id: 1,
+    //                 name: 'recipe1',
+    //                 description: 'recipe1',
+    //                 portions: 1,
+    //                 ingredients: [
+    //                     {
+    //                         id: 1,
+    //                         name: 'ingredient1',
+    //                         quantity: 1,
+    //                         unity: 'kg'
+    //                     },
+    //                 ],
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         name: 'Lista 1',
+    //         id: '5',
+    //         recipes: [
+    //             {
+    //                 id: 1,
+    //                 name: 'recipe1',
+    //                 description: 'recipe1',
+    //                 portions: 1,
+    //                 ingredients: [
+    //                     {
+    //                         id: 1,
+    //                         name: 'ingredient1',
+    //                         quantity: 1,
+    //                         unity: 'kg'
+    //                     },
+    //                 ],
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         name: 'Lista 1',
+    //         id: '6',
+    //         recipes: [
+    //             {
+    //                 id: 1,
+    //                 name: 'recipe1',
+    //                 description: 'recipe1',
+    //                 portions: 1,
+    //                 ingredients: [
+    //                     {
+    //                         id: 1,
+    //                         name: 'ingredient1',
+    //                         quantity: 1,
+    //                         unity: 'kg'
+    //                     },
+    //                 ],
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         name: 'Lista 1',
+    //         id: '7',
+    //         recipes: [
+    //             {
+    //                 id: 1,
+    //                 name: 'recipe1',
+    //                 description: 'recipe1',
+    //                 portions: 1,
+    //                 ingredients: [
+    //                     {
+    //                         id: 1,
+    //                         name: 'ingredient1',
+    //                         quantity: 1,
+    //                         unity: 'kg'
+    //                     },
+    //                 ],
+    //             }
+    //         ]
+    //     },
+    // ]
+
+    const { data } = useQuery('LISTS', async () => {
+        return api.get('/shoplists/all')
         },
         {
-            name: 'Lista 1',
-            id: '2',
-            recipes: [
-                {
-                    id: 1,
-                    name: 'recipe1',
-                    description: 'recipe1',
-                    portions: 1,
-                    ingredients: [
-                        {
-                            id: 1,
-                            name: 'ingredient1',
-                            quantity: 1,
-                            unity: 'kg'
-                        },
-                    ],
-                }
-            ]
-        },
-        {
-            name: 'Lista 1',
-            id: '3',
-            recipes: [
-                {
-                    id: 1,
-                    name: 'recipe1',
-                    description: 'recipe1',
-                    portions: 1,
-                    ingredients: [
-                        {
-                            id: 1,
-                            name: 'ingredient1',
-                            quantity: 1,
-                            unity: 'kg'
-                        },
-                    ],
-                }
-            ]
-        },
-        {
-            name: 'Lista 1',
-            id: '4',
-            recipes: [
-                {
-                    id: 1,
-                    name: 'recipe1',
-                    description: 'recipe1',
-                    portions: 1,
-                    ingredients: [
-                        {
-                            id: 1,
-                            name: 'ingredient1',
-                            quantity: 1,
-                            unity: 'kg'
-                        },
-                    ],
-                }
-            ]
-        },
-        {
-            name: 'Lista 1',
-            id: '5',
-            recipes: [
-                {
-                    id: 1,
-                    name: 'recipe1',
-                    description: 'recipe1',
-                    portions: 1,
-                    ingredients: [
-                        {
-                            id: 1,
-                            name: 'ingredient1',
-                            quantity: 1,
-                            unity: 'kg'
-                        },
-                    ],
-                }
-            ]
-        },
-        {
-            name: 'Lista 1',
-            id: '6',
-            recipes: [
-                {
-                    id: 1,
-                    name: 'recipe1',
-                    description: 'recipe1',
-                    portions: 1,
-                    ingredients: [
-                        {
-                            id: 1,
-                            name: 'ingredient1',
-                            quantity: 1,
-                            unity: 'kg'
-                        },
-                    ],
-                }
-            ]
-        },
-        {
-            name: 'Lista 1',
-            id: '7',
-            recipes: [
-                {
-                    id: 1,
-                    name: 'recipe1',
-                    description: 'recipe1',
-                    portions: 1,
-                    ingredients: [
-                        {
-                            id: 1,
-                            name: 'ingredient1',
-                            quantity: 1,
-                            unity: 'kg'
-                        },
-                    ],
-                }
-            ]
-        },
-    ]
+            onError: (error) => alert(error),
+        }
+    );
+    const lists = data?.data || [];
 
     return (
         <NavWrapper>
@@ -169,7 +180,7 @@ const ListsPage = () => {
                     <PageTitle>Listas</PageTitle>
                 </Header>
                 <Body style={{ gap: '5rem' }}>
-                    {lists.map((list) => (
+                    {lists.map((list: { id: string; }) => (
                         <ListCard 
                             checked={selectedListsIds.includes(list.id)} 
                             list={list} 
