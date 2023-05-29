@@ -7,6 +7,7 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './routes';
 import "@fontsource/poppins";
 import { initializeApp } from 'firebase/app';
+import AuthService from './components/AuthService';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -23,7 +24,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <App authService = {new AuthService()} />
   </React.StrictMode>
 );
 

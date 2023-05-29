@@ -7,10 +7,17 @@ import { Container, FormContainer, LoginPageContainer, Page, PageDescription, Fo
 import { Lock, Mail } from "@material-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
+import AuthService from "../../components/AuthService";
+import {useState} from 'react';
 
 
-const LoginPage = () => {
+type loginProps = {
+    authService: AuthService
+}
+
+const LoginPage = (props:loginProps) => {
   const auth = getAuth();
+  const [error,setError] = useState(null as any);
 
   interface FormValues {
     email: string;
@@ -37,6 +44,18 @@ const LoginPage = () => {
     }
   } 
 
+  const login = (values: FormValues) => {
+    props.authService.login(values.email,values.password)
+    .then(() => {
+      window.location.reload();
+      //navigate('/');
+    })
+    .catch(error =>{
+      setError(error);
+      console.log(error);
+    });
+  }
+
   return (
     <Container>
       <LoginPageContainer>
@@ -44,7 +63,7 @@ const LoginPage = () => {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={handleSubmit}>
+          onSubmit={login}>
           {({ values }) =>
             <Form>
               <FormContainer>
