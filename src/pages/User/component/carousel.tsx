@@ -9,6 +9,7 @@ import CardRecipe from "./card-carousel";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+import "./arrows.css";
 const data = [
   {
     id: "500",

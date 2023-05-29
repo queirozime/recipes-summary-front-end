@@ -34,4 +34,5 @@ export const PageSubTitle = styled.label`
   font-style: normal;
   font-weight: 500;
   font-size: 1.5rem;
+  color: #9d9fbc;
 `;

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Container = styled.div`
   width: 50%;
@@ -11,7 +11,6 @@ export const Title = styled.label`
   font-style: normal;
   font-weight: 500;
   font-size: 32px;
-  /* identical to box height */
 
   color: #17191a;
 `;

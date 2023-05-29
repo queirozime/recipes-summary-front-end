@@ -1,4 +1,4 @@
-import { Button, NavWrapper } from "../../components/Navbar/nav-styles";
+import { NavWrapper } from "../../components/Navbar/nav-styles";
 import VerticalNavbar from "../../components/Navbar/vertical-navbar-component";
 import {
   Container,
