@@ -170,7 +170,11 @@ const ListsPage = () => {
                 </Header>
                 <Body style={{ gap: '5rem' }}>
                     {lists.map((list) => (
-                        <ListCard checked={selectedListsIds.includes(list.id)} list={list} onChangeCheck={checkList}/>
+                        <ListCard 
+                            checked={selectedListsIds.includes(list.id)} 
+                            list={list} 
+                            onChangeCheck={checkList}
+                        />
                     ))}
                 </Body>
             </Container>

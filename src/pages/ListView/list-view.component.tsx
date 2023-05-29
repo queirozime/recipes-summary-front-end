@@ -99,13 +99,17 @@ const ListView = () => {
                 <Body>
                     <SummaryContainer>
                         <RecipeItems>
-                            Receitas Selecionadas
+                            <div style={{ fontSize: '1.5rem' }}>
+                                Receitas Selecionadas
+                            </div>
                             {currList.recipes.map((recipe) => (
                                 <Recipe>{recipe.name}</Recipe>
                             ))}
                         </RecipeItems>
                         <PortionsItems>
-                            Porções
+                            <div style={{ fontSize: '1.5rem' }}>
+                                Porções
+                            </div>
                             {currList.recipes.map((recipe) => (
                                 <PortionsWrapper>
                                     <Button 

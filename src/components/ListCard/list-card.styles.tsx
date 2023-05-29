@@ -7,6 +7,10 @@ export const Container = styled.div`
     border-radius: 10px;
     max-width: 300px;
     padding: 1rem;
+    cursor: pointer;
+    &: hover {
+        filter: brightness(0.9);
+    }
 `;
 
 export const ListDescription = styled.div`
