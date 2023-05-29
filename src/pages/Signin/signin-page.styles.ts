@@ -16,7 +16,7 @@ export const FormContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: 2rem;
 `;
 
 export const SigninPageContainer = styled.div`
@@ -27,6 +27,7 @@ export const SigninPageContainer = styled.div`
     padding: 0 2.5rem;
     height: 100%;
     justify-content: center;
+    font-size: 2rem;
 `;
 
 export const Page = styled.div`

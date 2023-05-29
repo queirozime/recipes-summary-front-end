@@ -1,15 +1,27 @@
 import { useState } from "react";
 import ListCard from "../../components/ListCard/list-card-component";
-import { Button, NavWrapper } from "../../components/Navbar/nav-styles";
+import { NavWrapper } from "../../components/Navbar/nav-styles";
 import VerticalNavbar from "../../components/Navbar/vertical-navbar-component";
 import { Body, Container, Header, PageTitle } from "../Recipes/recipes-page-styles";
 
 const ListsPage = () => {
-    const [selectedLists, setSelectedLists] = useState([])
+    interface List {
+        name: string;
+        id: string;
+        recipes: any;
+    }
+    const [selectedListsIds, setSelectedListsIds] = useState<string[]>([]);
+    const checkList = (list: List) => {
+        if(selectedListsIds.includes(list.id)) {
+            setSelectedListsIds(selectedListsIds.filter((item) => item !== list.id));
+        } else {
+            setSelectedListsIds([...selectedListsIds, list.id]);
+        }
+    }
     const lists = [
         {
             name: 'Lista 1',
-            id: 1,
+            id: '1',
             recipes: [
                 {
                     id: 1,
@@ -29,7 +41,7 @@ const ListsPage = () => {
         },
         {
             name: 'Lista 1',
-            id: 1,
+            id: '2',
             recipes: [
                 {
                     id: 1,
@@ -49,7 +61,7 @@ const ListsPage = () => {
         },
         {
             name: 'Lista 1',
-            id: 1,
+            id: '3',
             recipes: [
                 {
                     id: 1,
@@ -69,7 +81,7 @@ const ListsPage = () => {
         },
         {
             name: 'Lista 1',
-            id: 1,
+            id: '4',
             recipes: [
                 {
                     id: 1,
@@ -89,7 +101,7 @@ const ListsPage = () => {
         },
         {
             name: 'Lista 1',
-            id: 1,
+            id: '5',
             recipes: [
                 {
                     id: 1,
@@ -109,7 +121,7 @@ const ListsPage = () => {
         },
         {
             name: 'Lista 1',
-            id: 1,
+            id: '6',
             recipes: [
                 {
                     id: 1,
@@ -129,7 +141,7 @@ const ListsPage = () => {
         },
         {
             name: 'Lista 1',
-            id: 1,
+            id: '7',
             recipes: [
                 {
                     id: 1,
@@ -158,7 +170,11 @@ const ListsPage = () => {
                 </Header>
                 <Body style={{ gap: '5rem' }}>
                     {lists.map((list) => (
-                        <ListCard checked={false} list={list}/>
+                        <ListCard 
+                            checked={selectedListsIds.includes(list.id)} 
+                            list={list} 
+                            onChangeCheck={checkList}
+                        />
                     ))}
                 </Body>
             </Container>
