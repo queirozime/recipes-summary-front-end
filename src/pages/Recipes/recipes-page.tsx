@@ -107,6 +107,7 @@ const RecipesPage = () => {
                   portions={receipe.portion}
                   id={receipe.id}
                   handleShow={handleShow}
+                  handleClose={handleClose}
                 />
               </>
             );
