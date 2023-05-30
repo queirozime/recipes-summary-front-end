@@ -17,144 +17,165 @@ import Carousel from "./component/carousel";
 
 const lists = [
   {
-    name: "Lista 1",
+    title: "Lista 1",
     id: 1,
     recipes: [
       {
         id: 1,
-        name: "recipe1",
+        title: "recipe1",
         description: "recipe1",
         portions: 1,
         ingredients: [
           {
             id: 1,
-            name: "ingredient1",
+            title: "ingredient1",
             quantity: 1,
             unity: "kg",
           },
         ],
       },
     ],
+    lastAlterationDate:{
+      _seconds: 1620000000
+    }
   },
   {
-    name: "Lista 1",
+    title: "Lista 1",
     id: 1,
     recipes: [
       {
         id: 1,
-        name: "recipe1",
+        title: "recipe1",
         description: "recipe1",
         portions: 1,
         ingredients: [
           {
             id: 1,
-            name: "ingredient1",
+            title: "ingredient1",
             quantity: 1,
             unity: "kg",
           },
         ],
       },
     ],
+    lastAlterationDate:{
+      _seconds: 1620000000
+    }
   },
   {
-    name: "Lista 1",
+    title: "Lista 1",
     id: 1,
     recipes: [
       {
         id: 1,
-        name: "recipe1",
+        title: "recipe1",
         description: "recipe1",
         portions: 1,
         ingredients: [
           {
             id: 1,
-            name: "ingredient1",
+            title: "ingredient1",
             quantity: 1,
             unity: "kg",
           },
         ],
       },
     ],
+    lastAlterationDate:{
+      _seconds: 1620000000
+    }
   },
   {
-    name: "Lista 1",
+    title: "Lista 1",
     id: 1,
     recipes: [
       {
         id: 1,
-        name: "recipe1",
+        title: "recipe1",
         description: "recipe1",
         portions: 1,
         ingredients: [
           {
             id: 1,
-            name: "ingredient1",
+            title: "ingredient1",
             quantity: 1,
             unity: "kg",
           },
         ],
       },
     ],
+    lastAlterationDate:{
+      _seconds: 1620000000
+    }
   },
   {
-    name: "Lista 1",
+    title: "Lista 1",
     id: 1,
     recipes: [
       {
         id: 1,
-        name: "recipe1",
+        title: "recipe1",
         description: "recipe1",
         portions: 1,
         ingredients: [
           {
             id: 1,
-            name: "ingredient1",
+            title: "ingredient1",
             quantity: 1,
             unity: "kg",
           },
         ],
       },
     ],
+    lastAlterationDate:{
+      _seconds: 1620000000
+    }
   },
   {
-    name: "Lista 1",
+    title: "Lista 1",
     id: 1,
     recipes: [
       {
         id: 1,
-        name: "recipe1",
+        title: "recipe1",
         description: "recipe1",
         portions: 1,
         ingredients: [
           {
             id: 1,
-            name: "ingredient1",
+            title: "ingredient1",
             quantity: 1,
             unity: "kg",
           },
         ],
       },
     ],
+    lastAlterationDate:{
+      _seconds: 1620000000
+    }
   },
   {
-    name: "Lista 1",
+    title: "Lista 1",
     id: 1,
     recipes: [
       {
         id: 1,
-        name: "recipe1",
+        title: "recipe1",
         description: "recipe1",
         portions: 1,
         ingredients: [
           {
             id: 1,
-            name: "ingredient1",
+            title: "ingredient1",
             quantity: 1,
             unity: "kg",
           },
         ],
       },
     ],
+    lastAlterationDate:{
+      _seconds: 1620000000
+    }
   },
 ];
 
@@ -306,7 +327,7 @@ const UserPage = () => {
   const navigation = useNavigate();
 
   const list = () => {
-    return lists.map((list) => <ListCard checked={false} list={list} />);
+    return lists.map((list) => <ListCard checked={false} list={list} hasCheck={false} />);
   };
 
   const recipes = () => {
