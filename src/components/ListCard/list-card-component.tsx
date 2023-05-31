@@ -7,12 +7,16 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 const ListCard: React.FC<any> = ({ list, checked, onChangeCheck }) => {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
+    const date = new Date(list.lastAlterationDate._seconds*1000)
+    const day = date.getDate();
+    const month = date.getMonth();
+    const year = date.getFullYear();
 
     return (
         <Container onClick={(e) => {
             e.stopPropagation();
             navigate('/list-view')
-            setSearchParams({ listId: list.id })
+            setSearchParams({ listId: list.shoplistId })
         }}>
             <CheckboxContainer onClick={(e) => e.stopPropagation()}>
                 <Checkbox checked={checked} onChange={(e) => {
@@ -20,10 +24,10 @@ const ListCard: React.FC<any> = ({ list, checked, onChangeCheck }) => {
                     e.stopPropagation();
                 }} />
             </CheckboxContainer>
-            <ListDescription>{list.name}</ListDescription>
+            <ListDescription>{list.title}</ListDescription>
             <ListInfo>
                 <AccessTime />
-                22/2/2
+                {`${day}/${month+1}/${year}`}
             </ListInfo>
         </Container>
     )

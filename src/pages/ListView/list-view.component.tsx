@@ -1,61 +1,66 @@
 import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useQuery } from "react-query";
 import { NavWrapper } from "../../components/Navbar/nav-styles";
 import VerticalNavbar from "../../components/Navbar/vertical-navbar-component";
 import { Button as MainButton } from "../../components/Navbar/nav-styles";
 import { Container, Header, PageTitle } from "../Recipes/recipes-page-styles";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { Body, Button, ButtonsContainer, PortionValue, PortionsItems, PortionsWrapper, Recipe, RecipeItems, StyledTable, SummaryContainer, TableContainer } from "./list-view.styles";
+import { 
+    Body, 
+    Button, 
+    ButtonsContainer, 
+    PortionValue, 
+    PortionsItems, 
+    PortionsWrapper, 
+    Recipe, 
+    RecipeItems, 
+    StyledTable, 
+    SummaryContainer, 
+    TableContainer 
+} from "./list-view.styles";
 import ExportCSV from "../../utils/csv-util";
+import api from "../../http-client"
+import { Ingredient, List, Recipe as RecipeType } from "../../types";
 
 const ListView = () => {
-    const mockList = {
-        name: 'Lista 1',
-        id: '1',
-        recipes: [
-            {
-                id: 1,
-                name: 'recipe1',
-                description: 'recipe1',
-                portions: 1,
-                ingredients: [
-                    {
-                        id: 1,
-                        name: 'ingredient1',
-                        quantity: 1,
-                        unity: 'kg'
-                    },
-                ],
-            }
-        ],
-        ingredients: [
-            {
-                id: 1,
-                name: 'ingredient1',
-                quantity: 1,
-                unity: 'kg'
-            },
-        ],
-    }
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const listId = searchParams.get('listId');
-    // const list = getList(listId); 
-    const [currList, setList] = useState(mockList);
+    const initialData: List = {
+        title: '',
+        recipes: [],
+        ingredients: [],
+        id: '',
+    }
+    const fetch = async () => {
+        const res = await api.get(`/shoplists/${listId}`);
+        return res.data;
+    }
 
-    const csvData = currList.ingredients.map((item) => {
+    const { data } = useQuery(['LIST'], fetch,
+        {  
+            optimisticResults: false,
+            keepPreviousData: false,
+            initialData: initialData,
+            onError: (error) => alert(error),
+        }
+    );
+    const [currList, setList] = useState<List>(data);
+
+    const csvData = currList?.ingredients?.map((item) => {
         return [
             item.name,
-            item.quantity,
-            item.unity
+            item.qty,
+            item.unit
         ]
     });
 
-    const handleAddPortion = (recipeId: number) => {
-        const newRecipes = currList.recipes.map((recipe) => {
+    const handleAddPortion = (recipeId: string) => {
+        const newRecipes = currList?.recipes?.map((recipe) => {
             if(recipe.id === recipeId) {
                 return {
                     ...recipe,
-                    portions: recipe.portions + 1
+                    portions: recipe.portion + 1
                 }
             }
             return recipe;
@@ -66,12 +71,12 @@ const ListView = () => {
         });
     }
 
-    const handleRemovePortion = (recipeId: number) => {
-        const newRecipes = currList.recipes.map((recipe) => {
-            if(recipe.id === recipeId && recipe.portions > 0) {
+    const handleRemovePortion = (recipeId: string) => {
+        const newRecipes = currList?.recipes?.map((recipe) => {
+            if(recipe.id === recipeId && recipe.portion > 0) {
                 return {
                     ...recipe,
-                    portions: recipe.portions - 1
+                    portions: recipe.portion - 1
                 }
             }
             return recipe;
@@ -85,7 +90,6 @@ const ListView = () => {
     const handleSubmitList = () => {
         console.log(currList);
         navigate('/lists');
-        
     }
     
 
@@ -94,7 +98,7 @@ const ListView = () => {
             <VerticalNavbar />
             <Container>
                 <Header>
-                    <PageTitle>{`${currList.name}`}</PageTitle>
+                    <PageTitle>{`${data?.title}`}</PageTitle>
                 </Header>
                 <Body>
                     <SummaryContainer>
@@ -102,15 +106,15 @@ const ListView = () => {
                             <div style={{ fontSize: '1.5rem' }}>
                                 Receitas Selecionadas
                             </div>
-                            {currList.recipes.map((recipe) => (
-                                <Recipe>{recipe.name}</Recipe>
+                            {data?.recipes?.map((recipe: RecipeType) => (
+                                <Recipe>{recipe.title}</Recipe>
                             ))}
                         </RecipeItems>
                         <PortionsItems>
                             <div style={{ fontSize: '1.5rem' }}>
                                 Porções
                             </div>
-                            {currList.recipes.map((recipe) => (
+                            {data?.recipes?.map((recipe: RecipeType) => (
                                 <PortionsWrapper>
                                     <Button 
                                         style={{ 
@@ -119,7 +123,7 @@ const ListView = () => {
                                             }}
                                         onClick={() => handleRemovePortion(recipe.id)}
                                     >-</Button>
-                                    <PortionValue>{recipe.portions}</PortionValue>
+                                    <PortionValue>{recipe.portion}</PortionValue>
                                     <Button style={{ 
                                         borderTopRightRadius: '0.5rem', 
                                         borderBottomRightRadius: '0.5rem' 
@@ -141,11 +145,11 @@ const ListView = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {currList.ingredients.map((item, index) => (
+                                    {data?.ingredients?.map((item: Ingredient, index: number) => (
                                     <tr key={index}>
                                         <td>{item.name}</td>
-                                        <td>{item.quantity}</td>
-                                        <td>{item.unity}</td>
+                                        <td>{item.qty}</td>
+                                        <td>{item.unit}</td>
                                     </tr>
                                     ))}
                                 </tbody>
@@ -156,7 +160,7 @@ const ListView = () => {
                         <ExportCSV 
                             data={csvData} 
                             headers={['Ingrediente', 'Quantidade', 'Unidade']} 
-                            filename={`${currList.name}.csv`}
+                            filename={`${data?.title}.csv`}
                         />
                         <MainButton onClick={handleSubmitList}>Salvar</MainButton>
                     </ButtonsContainer>

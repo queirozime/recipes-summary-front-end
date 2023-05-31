@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import {
   Header,
   Image,
@@ -17,16 +17,14 @@ import {
 } from "./modal-style";
 import { useSearchParams } from "react-router-dom";
 import { Icon } from "@material-ui/core";
-import { Settings, Group, AccessTime } from "@material-ui/icons";
+import { useQuery } from "react-query";
+import { Settings, Group } from "@material-ui/icons";
+import { Ingredient, Recipe } from "../../types";
+import api from "../../http-client";
 
 interface ModalProps {
   handleClose: () => void;
-}
-
-interface Ingredientes {
-  name: string;
-  qtd: string;
-  unit: string;
+  handleAddRecipe: (id: string) => void;
 }
 
 const dataFake = {
@@ -37,22 +35,22 @@ const dataFake = {
   ingredients: [
     {
       name: "ovo",
-      qtd: "2",
+      qty: 2,
       unit: "unidade",
     },
     {
       name: "frango desfiado",
-      qtd: "1",
+      qty: 1,
       unit: "grama",
     },
     {
       name: "manteiga",
-      qtd: "50",
+      qty: 50,
       unit: "grama",
     },
     {
       name: "orégano",
-      qtd: "1",
+      qty: 1,
       unit: "colher de sopa",
     },
   ],
@@ -70,22 +68,22 @@ const dataFake2 = {
   ingredients: [
     {
       name: "ovo",
-      qtd: "2",
+      qty: 2,
       unit: "unidade",
     },
     {
       name: "frango desfiado",
-      qtd: "1",
+      qty: 1,
       unit: "grama",
     },
     {
       name: "manteiga",
-      qtd: "50",
+      qty: 50,
       unit: "grama",
     },
     {
       name: "orégano",
-      qtd: "1",
+      qty: 1,
       unit: "colher de sopa",
     },
   ],
@@ -95,45 +93,38 @@ const dataFake2 = {
   ],
 };
 
-const ModalRecipe: React.FC<ModalProps> = ({ handleClose }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [data, setData] = useState(dataFake);
+const ModalRecipe: React.FC<ModalProps> = ({ handleClose, handleAddRecipe }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [ingredientes, setIngredientes] = useState([""]);
-  const getData = (id: string | null) => {
-    if (id) {
-      setData(dataFake2);
+  const isOpen = useMemo(() => searchParams.has("id"), [searchParams]);
+
+  const { data } = useQuery('RECIPE', async () => {
+    return api.get(`/recipes/${searchParams.get("id")}`)
+    },
+    {
+        onError: (error) => alert(error),
+        enabled: isOpen,
     }
-  };
-  const getIngredientes = (ingredientes: Ingredientes[]) => {
+  );
+
+  const recipe: Recipe = useMemo(() => data?.data, [data]);
+  const getIngredientes = (ingredientes: Ingredient[]) => {
     let aux = [];
     for (let ingrediente of ingredientes) {
       let stringAux =
-        ingrediente.qtd + " " + ingrediente.unit + " de " + ingrediente.name;
+        ingrediente.qty + " " + ingrediente.unit + " de " + ingrediente.name;
       aux.push(stringAux);
     }
     return aux;
   };
-  useEffect(() => {
-    if (searchParams.has("id")) {
-      setIsOpen(true);
-      getData(searchParams.get("id"));
-    } else {
-      setIsOpen(false);
-    }
-  }, [searchParams]);
-  useEffect(() => {
-    setIngredientes(getIngredientes(data.ingredients));
-  }, [data]);
 
   return isOpen ? (
     <>
       <Background onClick={handleClose} />
       <Modal>
         <Header>
-          <Image src={data.url} />
+          <Image src={recipe?.imageUrl} />
           <HeaderText>
-            <HeaderTitle>{data.title}</HeaderTitle>
+            <HeaderTitle>{recipe?.title}</HeaderTitle>
             <HeaderColumns>
               {/* <HeaderColumn>
                 <Icon component={AccessTime} style={{ fontSize: 25 }} />
@@ -141,7 +132,7 @@ const ModalRecipe: React.FC<ModalProps> = ({ handleClose }) => {
               </HeaderColumn> */}
               <HeaderColumn>
                 <Icon component={Group} style={{ fontSize: 25 }} />
-                <Text>{data.portion} Porções</Text>
+                <Text>{recipe?.portion} Porções</Text>
               </HeaderColumn>
               <HeaderColumn>
                 <Icon component={Settings} style={{ fontSize: 25 }} />
@@ -153,18 +144,23 @@ const ModalRecipe: React.FC<ModalProps> = ({ handleClose }) => {
         <ContainerInfo>
           <Preparo>
             <Title>Preparo</Title>
-            {data.instructions.map((instruction) => {
+            {recipe?.instructions.map((instruction: any) => {
               return <li>{instruction}</li>;
             })}
           </Preparo>
           <Ingredientes>
             <Title>Ingredientes</Title>
-            {ingredientes.map((ingrediente) => {
-              return <li>{ingrediente}</li>;
+            {recipe?.ingredients.map((ingrediente) => {
+              return <li>{ingrediente.qty + " " + ingrediente.unit + " de " + ingrediente.name}</li>;
             })}
           </Ingredientes>
         </ContainerInfo>
-        <Button onClick={handleClose}>Adicionar</Button>
+        <Button onClick={() => {
+          handleAddRecipe(recipe.id);
+          handleClose();
+        }}>
+          Adicionar
+        </Button>
       </Modal>
     </>
   ) : null;

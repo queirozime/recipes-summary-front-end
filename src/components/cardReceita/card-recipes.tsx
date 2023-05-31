@@ -18,10 +18,12 @@ import { Check, StarBorder, Star, Restaurant } from "@material-ui/icons";
 interface CardProps {
   name: string;
   img: string;
-  portions: string;
+  portions: number;
   id: string;
   handleShow: (id: string) => void;
   handleClose: () => void;
+  checked: boolean;
+  onCheckChange: (id: string) => void;
 }
 
 const CardRecipe: React.FC<CardProps> = ({
@@ -31,18 +33,26 @@ const CardRecipe: React.FC<CardProps> = ({
   id,
   handleShow,
   handleClose,
+  checked,
+  onCheckChange
 }) => {
   const [isFav, setIsFav] = useState(false);
   return (
     <CardContainer>
       <Card>
-        <ImageBackground url={img}>
-          <AddButton>
+        <ImageBackground url={img} onClick={() => handleShow(id)}>
+          <AddButton 
+            $isSelected={checked} 
+            onClick={(e) => {
+              onCheckChange(id)
+              e.stopPropagation();
+            }}
+          >
             <Icon component={Check} style={{ color: "white", fontSize: 15 }} />
           </AddButton>
         </ImageBackground>
         <Footer
-          onClick={(event) => {
+          onClick={() => {
             handleShow(id);
           }}
         >
@@ -50,9 +60,10 @@ const CardRecipe: React.FC<CardProps> = ({
             <Title>
               <TextTitle>{name}</TextTitle>
               <FavIcon
-                onClick={() => {
+                onClick={(e) => {
                   handleClose();
                   setIsFav(!isFav);
+                  e.stopPropagation();
                 }}
               >
                 {isFav ? (
