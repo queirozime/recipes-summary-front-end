@@ -84,6 +84,8 @@ export const ContainerInfo = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 100%;
+  justify-content: space-around;
 `;
 export const Ingredientes = styled.div`
   display: flex;
@@ -125,14 +127,12 @@ export const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 10%;
-  max-height: 10%;
   background: #ee504f;
   border-radius: 8px;
   padding: 0.5rem 2rem;
+  margin: 1.5rem 0; 
   font-family: "Poppins";
   color: white;
-  font-size: 0.5rem;
   border: none;
   cursor: pointer;
   &:hover {

@@ -16,7 +16,7 @@ const ListCard: React.FC<any> = ({ list, checked, onChangeCheck }) => {
         <Container onClick={(e) => {
             e.stopPropagation();
             navigate('/list-view')
-            setSearchParams({ listId: list.id })
+            setSearchParams({ listId: list.shoplistId })
         }}>
             <CheckboxContainer onClick={(e) => e.stopPropagation()}>
                 <Checkbox checked={checked} onChange={(e) => {

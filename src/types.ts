@@ -9,6 +9,8 @@ export interface Recipe {
     title: string;
     portion: number;
     basePortion: number;
+    imageUrl: string;
+    instructions: string[];
 }
 export interface List {
     title: string;

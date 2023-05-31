@@ -5,6 +5,7 @@ import { NavWrapper } from "../../components/Navbar/nav-styles";
 import VerticalNavbar from "../../components/Navbar/vertical-navbar-component";
 import { Body, Container, Header, PageTitle } from "../Recipes/recipes-page-styles";
 import api from "../../http-client";
+import { getAuth } from "firebase/auth";
 
 const ListsPage = () => {
     interface List {
@@ -20,6 +21,7 @@ const ListsPage = () => {
             setSelectedListsIds([...selectedListsIds, list.id]);
         }
     }
+    const { currentUser } = getAuth();
     // const lists = [
     //     {
     //         name: 'Lista 1',
@@ -164,7 +166,7 @@ const ListsPage = () => {
     // ]
 
     const { data } = useQuery('LISTS', async () => {
-        return api.get('/shoplists/all')
+        return api.get(`/shoplists?user=${currentUser?.uid}`)
         },
         {
             onError: (error) => alert(error),

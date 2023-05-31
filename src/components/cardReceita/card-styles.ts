@@ -30,11 +30,11 @@ export const ImageBackground = styled.div<ImageBackgroundProps>`
   background: url(${(props) => props.url}), #a5a5a5;
   background-size: cover;
   background-position: center;
-
+  cursor: pointer;
   border-radius: 16px 16px 0 0;
 `;
 
-export const AddButton = styled.button`
+export const AddButton = styled.button<{ $isSelected: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,10 +45,8 @@ export const AddButton = styled.button`
   margin-right: 15px;
   box-shadow: 0px 7px 15px rgba(254, 114, 76, 0.4);
   border-radius: 21px;
-
-  &:active {
-    background-color: #029094;
-  }
+  background-color: ${(props) => (props.$isSelected ? "#FE724C" : "white")};
+  cursor: pointer;
 `;
 
 export const Footer = styled.div`
@@ -88,16 +86,16 @@ export const FavIcon = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 18px;
-  height: 17px;
   background: transparent;
   border-width: 0px;
   padding: 0px;
+  margin-left: 10px;
 `;
 
 export const ContainerDescription = styled.div`
-  width: 252px;
-  height: 57px;
+  font-family: "Poppins";
+  font-size: 20px;
+  cursor: pointer;
 `;
 
 export const Description = styled.div`

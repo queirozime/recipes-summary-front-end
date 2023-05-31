@@ -153,15 +153,16 @@ export const LogoImg = styled.img`
 `;
 
 export const Button = styled.button`
-  background: #EE504F;
+  background: ${(p) => p.disabled ? 'grey' : '#EE504F'};
   border-radius: 8px;
   padding: 0.5rem 2rem;
   font-family: 'Poppins';
   color: white;
   font-size: 1.5rem;
   border: none;
-  cursor: pointer;
+  cursor: ${(p) => p.disabled ? 'default' : 'pointer'};
   &:hover {
-    filter: brightness(0.8);
+    filter: ${(p) => p.disabled ? 'none' : 'brightness(0.8)'};
   }
+
 `;
