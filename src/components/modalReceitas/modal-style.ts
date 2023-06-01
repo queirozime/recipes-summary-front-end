@@ -12,7 +12,7 @@ export const Modal = styled.div`
   position: fixed;
   z-index: 100;
   width: 61%;
-  height: 70%;
+  overflow-y: auto;
   background-color: #fff;
   margin-top: 9%;
   display: flex;
@@ -130,7 +130,7 @@ export const Button = styled.button`
   background: #ee504f;
   border-radius: 8px;
   padding: 0.5rem 2rem;
-  margin: 1.5rem 0; 
+  margin: 1.5rem 0;
   font-family: "Poppins";
   color: white;
   border: none;

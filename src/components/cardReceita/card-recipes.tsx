@@ -34,17 +34,23 @@ const CardRecipe: React.FC<CardProps> = ({
   handleShow,
   handleClose,
   checked,
-  onCheckChange
+  onCheckChange,
 }) => {
   const [isFav, setIsFav] = useState(false);
+  const frase = name;
+  const limiteCaracteres = 24;
+  const nameLimitado =
+    frase.length > limiteCaracteres
+      ? frase.slice(0, limiteCaracteres) + "..."
+      : frase;
   return (
     <CardContainer>
       <Card>
         <ImageBackground url={img} onClick={() => handleShow(id)}>
-          <AddButton 
-            $isSelected={checked} 
+          <AddButton
+            $isSelected={checked}
             onClick={(e) => {
-              onCheckChange(id)
+              onCheckChange(id);
               e.stopPropagation();
             }}
           >
@@ -58,7 +64,7 @@ const CardRecipe: React.FC<CardProps> = ({
         >
           <ContainerDescription>
             <Title>
-              <TextTitle>{name}</TextTitle>
+              <TextTitle>{nameLimitado}</TextTitle>
               <FavIcon
                 onClick={(e) => {
                   handleClose();
