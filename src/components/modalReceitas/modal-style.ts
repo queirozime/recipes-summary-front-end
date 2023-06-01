@@ -14,7 +14,7 @@ export const Modal = styled.div`
   width: 61%;
   overflow-y: auto;
   background-color: #fff;
-  margin-top: 9%;
+  margin-top: 5%;
   display: flex;
   flex-direction: column;
   align-items: center;

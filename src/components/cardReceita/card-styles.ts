@@ -27,7 +27,7 @@ interface ImageBackgroundProps
 export const ImageBackground = styled.div<ImageBackgroundProps>`
   display: flex;
   justify-content: flex-end;
-  width: 95%;
+  width: 96%;
   overflow-y: auto;
   background: url(${(props) => props.url}), #a5a5a5;
   background-size: cover;
@@ -91,7 +91,6 @@ export const FavIcon = styled.button`
   background: transparent;
   border-width: 0px;
   padding: 0px;
-  margin-left: 0.01%;
 `;
 
 export const ContainerDescription = styled.div`
