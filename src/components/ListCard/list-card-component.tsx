@@ -4,7 +4,7 @@ import { AccessTime } from '@material-ui/icons';
 import { Checkbox } from '@material-ui/core';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-const ListCard: React.FC<any> = ({ list, checked, onChangeCheck }) => {
+const ListCard: React.FC<any> = ({ list, checked, onChangeCheck, hasCheck=true }) => {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
     const date = new Date(list.lastAlterationDate._seconds*1000)
@@ -18,12 +18,14 @@ const ListCard: React.FC<any> = ({ list, checked, onChangeCheck }) => {
             navigate('/list-view')
             setSearchParams({ listId: list.shoplistId })
         }}>
-            <CheckboxContainer onClick={(e) => e.stopPropagation()}>
-                <Checkbox checked={checked} onChange={(e) => {
-                    onChangeCheck(list)
-                    e.stopPropagation();
-                }} />
-            </CheckboxContainer>
+            {hasCheck && (
+                <CheckboxContainer onClick={(e) => e.stopPropagation()}>
+                    <Checkbox checked={checked} onChange={(e) => {
+                        onChangeCheck(list)
+                        e.stopPropagation();
+                    }} />
+                </CheckboxContainer>
+            )}
             <ListDescription>{list.title}</ListDescription>
             <ListInfo>
                 <AccessTime />
