@@ -14,6 +14,10 @@ import ListCard from "../../components/ListCard/list-card-component";
 import CardRecipe from "./component/card-carousel";
 
 import Carousel from "./component/carousel";
+import api from "../../http-client";
+import { useMemo } from "react";
+import { useQuery } from "react-query";
+import { getAuth } from "firebase/auth";
 
 const lists = [
   {
@@ -324,12 +328,37 @@ const data = [
 
 const UserPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const auth = getAuth();
   const navigation = useNavigate();
 
   const list = () => {
     return lists.map((list) => <ListCard checked={false} list={list} hasCheck={false} />);
   };
+      // Código para gerar o token usando Firebase
+  
 
+  const token = useMemo(() => {
+    return auth.currentUser?.getIdToken();
+  }, [auth]);
+
+
+  // Use o token para fazer a consulta quando ele estiver disponível
+  const { data: user } = useQuery(
+    "USER",
+    async () => {
+      return api.get(`/users`, {
+        headers: {
+          Authorization: `${await token}`,
+        },
+      });
+    },
+    {
+      onError: (error) => alert(error),
+    }
+  );
+
+  console.log(user?.data);
+  
   const recipes = () => {
     const handleClose = () => {
       navigation("/");
@@ -358,8 +387,8 @@ const UserPage = () => {
       <VerticalNavbar />
       <Container>
         <Header>
-          <PageTitle>Usuário</PageTitle>
-          <PageSubTitle>usuario@gmail.com</PageSubTitle>
+          <PageTitle>{user?.data.name}</PageTitle>
+          <PageSubTitle>{user?.data.email}</PageSubTitle>
         </Header>
         <Body>
           <Carousel title={"Listas Favoritas"} handleSlides={list} />
