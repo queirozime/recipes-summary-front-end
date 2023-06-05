@@ -337,8 +337,10 @@ const UserPage = () => {
       // Código para gerar o token usando Firebase
   
 
-  const token = useMemo(() => {
-    return auth.currentUser?.getIdToken();
+  const token = useMemo(async () => {
+    const tokenId = await auth.currentUser?.getIdToken();
+    //console.log(tokenId)
+    return tokenId;
   }, [auth]);
 
 
@@ -357,7 +359,7 @@ const UserPage = () => {
     }
   );
 
-  console.log(user?.data);
+
   
   const recipes = () => {
     const handleClose = () => {
