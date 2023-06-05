@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 export const Container = styled.div`
   width: 50%;
@@ -8,10 +8,7 @@ export const Container = styled.div`
   margin-top: 0.5%;
 `;
 export const Title = styled.label`
-  font-family: "Inter";
-  font-style: normal;
   font-weight: 500;
   font-size: 32px;
-
   color: #17191a;
 `;

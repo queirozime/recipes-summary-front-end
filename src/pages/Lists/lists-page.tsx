@@ -166,7 +166,11 @@ const ListsPage = () => {
     // ]
 
     const { data } = useQuery('LISTS', async () => {
-        return api.get(`/shoplists?user=${currentUser?.uid}`)
+        return api.get(`/shoplists`, {
+            headers: {
+                Authorization: await currentUser?.getIdToken()
+            }
+        })
         },
         {
             onError: (error) => alert(error),

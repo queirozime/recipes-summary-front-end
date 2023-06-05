@@ -6,7 +6,7 @@ import { Button } from "../../components/Navbar/nav-styles";
 import { Container, FormContainer, SigninPageContainer, Page, PageDescription, FormikField } from "./signin-page.styles";
 import { Lock, Mail, Person } from "@material-ui/icons";
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
+import { signInWithEmailAndPassword, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const SigninPage = () => {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const SigninPage = () => {
   const handleSubmit = async (values: FormValues) => {
     try{
       if(values.password1 === values.password2) {
-        await signInWithEmailAndPassword(auth, values.email, values.password1);
+        await createUserWithEmailAndPassword(auth, values.email, values.password1);
         navigate("/");
       }
       else{

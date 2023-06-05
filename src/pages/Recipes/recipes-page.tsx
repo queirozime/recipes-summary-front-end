@@ -9,6 +9,7 @@ import { useQuery } from "react-query";
 import api from "../../http-client";
 import { Recipe } from "../../types";
 import { useMemo, useState } from "react";
+import ConfirmationModal from "../../components/ConfirmationModal/confirmation-modal";
 
 // const data = [
 //   {
@@ -87,6 +88,7 @@ const RecipesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigation = useNavigate();
   const [selectedRecipeIds, setSelectedRecipeIds] = useState<string[]>([]);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false);
 
   const { data } = useQuery('RECIPES', async () => {
     return api.get(`/recipes/all`)
@@ -122,10 +124,15 @@ const RecipesPage = () => {
           handleClose={handleClose} 
           handleAddRecipe={handleCheckChange}
         />
+        <ConfirmationModal 
+          isOpen={isConfirmationOpen} 
+          onOpenChange={setIsConfirmationOpen}
+          data={recipes?.filter((recipe: Recipe) => selectedRecipeIds.includes(recipe.id))}
+        />
         <Header>
           <PageTitle>Receitas</PageTitle>
           <Button 
-            onClick={() => console.log('openModal')}
+            onClick={() => setIsConfirmationOpen(true)}
             disabled={selectedRecipeIds.length === 0}
           >
             Criar Lista

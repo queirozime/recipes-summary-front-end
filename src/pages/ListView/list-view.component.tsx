@@ -60,7 +60,7 @@ const ListView = () => {
             if(recipe.id === recipeId) {
                 return {
                     ...recipe,
-                    portions: recipe.portion + 1
+                    portion: recipe.portion + 1
                 }
             }
             return recipe;
@@ -76,7 +76,7 @@ const ListView = () => {
             if(recipe.id === recipeId && recipe.portion > 0) {
                 return {
                     ...recipe,
-                    portions: recipe.portion - 1
+                    portion: recipe.portion - 1
                 }
             }
             return recipe;

@@ -107,14 +107,10 @@ const ModalRecipe: React.FC<ModalProps> = ({ handleClose, handleAddRecipe }) => 
   );
 
   const recipe: Recipe = useMemo(() => data?.data, [data]);
-  const getIngredientes = (ingredientes: Ingredient[]) => {
-    let aux = [];
-    for (let ingrediente of ingredientes) {
-      let stringAux =
-        ingrediente.qty + " " + ingrediente.unit + " de " + ingrediente.name;
-      aux.push(stringAux);
-    }
-    return aux;
+  const getIngredientText = (ingredient: Ingredient) => {
+    if (ingredient.qty !== null)
+      return `${ingredient.qty} ${ingredient.unit} de ${ingredient.name}`;
+    return `${ingredient.name} ${ingredient.unit}`;
   };
 
   return isOpen ? (
@@ -150,8 +146,8 @@ const ModalRecipe: React.FC<ModalProps> = ({ handleClose, handleAddRecipe }) => 
           </Preparo>
           <Ingredientes>
             <Title>Ingredientes</Title>
-            {recipe?.ingredients.map((ingrediente) => {
-              return <li>{ingrediente.qty + " " + ingrediente.unit + " de " + ingrediente.name}</li>;
+            {recipe?.ingredients.map((ingredient) => {
+              return <li>{getIngredientText(ingredient)}</li>;
             })}
           </Ingredientes>
         </ContainerInfo>
