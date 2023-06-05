@@ -4,7 +4,6 @@ import { NavWrapper } from "../../components/Navbar/nav-styles";
 import VerticalNavbar from "../../components/Navbar/vertical-navbar-component";
 import {
   Container,
-  Header,
   PageTitle,
   Body,
   PageSubTitle,
@@ -18,170 +17,173 @@ import api from "../../http-client";
 import { useMemo } from "react";
 import { useQuery } from "react-query";
 import { getAuth } from "firebase/auth";
+import { List } from "../../types";
+import { AxiosError } from "axios";
+import { Header } from "./user-page.styles";
 
-const lists = [
-  {
-    title: "Lista 1",
-    id: 1,
-    recipes: [
-      {
-        id: 1,
-        title: "recipe1",
-        description: "recipe1",
-        portions: 1,
-        ingredients: [
-          {
-            id: 1,
-            title: "ingredient1",
-            quantity: 1,
-            unity: "kg",
-          },
-        ],
-      },
-    ],
-    lastAlterationDate:{
-      _seconds: 1620000000
-    }
-  },
-  {
-    title: "Lista 1",
-    id: 1,
-    recipes: [
-      {
-        id: 1,
-        title: "recipe1",
-        description: "recipe1",
-        portions: 1,
-        ingredients: [
-          {
-            id: 1,
-            title: "ingredient1",
-            quantity: 1,
-            unity: "kg",
-          },
-        ],
-      },
-    ],
-    lastAlterationDate:{
-      _seconds: 1620000000
-    }
-  },
-  {
-    title: "Lista 1",
-    id: 1,
-    recipes: [
-      {
-        id: 1,
-        title: "recipe1",
-        description: "recipe1",
-        portions: 1,
-        ingredients: [
-          {
-            id: 1,
-            title: "ingredient1",
-            quantity: 1,
-            unity: "kg",
-          },
-        ],
-      },
-    ],
-    lastAlterationDate:{
-      _seconds: 1620000000
-    }
-  },
-  {
-    title: "Lista 1",
-    id: 1,
-    recipes: [
-      {
-        id: 1,
-        title: "recipe1",
-        description: "recipe1",
-        portions: 1,
-        ingredients: [
-          {
-            id: 1,
-            title: "ingredient1",
-            quantity: 1,
-            unity: "kg",
-          },
-        ],
-      },
-    ],
-    lastAlterationDate:{
-      _seconds: 1620000000
-    }
-  },
-  {
-    title: "Lista 1",
-    id: 1,
-    recipes: [
-      {
-        id: 1,
-        title: "recipe1",
-        description: "recipe1",
-        portions: 1,
-        ingredients: [
-          {
-            id: 1,
-            title: "ingredient1",
-            quantity: 1,
-            unity: "kg",
-          },
-        ],
-      },
-    ],
-    lastAlterationDate:{
-      _seconds: 1620000000
-    }
-  },
-  {
-    title: "Lista 1",
-    id: 1,
-    recipes: [
-      {
-        id: 1,
-        title: "recipe1",
-        description: "recipe1",
-        portions: 1,
-        ingredients: [
-          {
-            id: 1,
-            title: "ingredient1",
-            quantity: 1,
-            unity: "kg",
-          },
-        ],
-      },
-    ],
-    lastAlterationDate:{
-      _seconds: 1620000000
-    }
-  },
-  {
-    title: "Lista 1",
-    id: 1,
-    recipes: [
-      {
-        id: 1,
-        title: "recipe1",
-        description: "recipe1",
-        portions: 1,
-        ingredients: [
-          {
-            id: 1,
-            title: "ingredient1",
-            quantity: 1,
-            unity: "kg",
-          },
-        ],
-      },
-    ],
-    lastAlterationDate:{
-      _seconds: 1620000000
-    }
-  },
-];
+// const lists = [
+//   {
+//     title: "Lista 1",
+//     id: 1,
+//     recipes: [
+//       {
+//         id: 1,
+//         title: "recipe1",
+//         description: "recipe1",
+//         portions: 1,
+//         ingredients: [
+//           {
+//             id: 1,
+//             title: "ingredient1",
+//             quantity: 1,
+//             unity: "kg",
+//           },
+//         ],
+//       },
+//     ],
+//     lastAlterationDate:{
+//       _seconds: 1620000000
+//     }
+//   },
+//   {
+//     title: "Lista 1",
+//     id: 1,
+//     recipes: [
+//       {
+//         id: 1,
+//         title: "recipe1",
+//         description: "recipe1",
+//         portions: 1,
+//         ingredients: [
+//           {
+//             id: 1,
+//             title: "ingredient1",
+//             quantity: 1,
+//             unity: "kg",
+//           },
+//         ],
+//       },
+//     ],
+//     lastAlterationDate:{
+//       _seconds: 1620000000
+//     }
+//   },
+//   {
+//     title: "Lista 1",
+//     id: 1,
+//     recipes: [
+//       {
+//         id: 1,
+//         title: "recipe1",
+//         description: "recipe1",
+//         portions: 1,
+//         ingredients: [
+//           {
+//             id: 1,
+//             title: "ingredient1",
+//             quantity: 1,
+//             unity: "kg",
+//           },
+//         ],
+//       },
+//     ],
+//     lastAlterationDate:{
+//       _seconds: 1620000000
+//     }
+//   },
+//   {
+//     title: "Lista 1",
+//     id: 1,
+//     recipes: [
+//       {
+//         id: 1,
+//         title: "recipe1",
+//         description: "recipe1",
+//         portions: 1,
+//         ingredients: [
+//           {
+//             id: 1,
+//             title: "ingredient1",
+//             quantity: 1,
+//             unity: "kg",
+//           },
+//         ],
+//       },
+//     ],
+//     lastAlterationDate:{
+//       _seconds: 1620000000
+//     }
+//   },
+//   {
+//     title: "Lista 1",
+//     id: 1,
+//     recipes: [
+//       {
+//         id: 1,
+//         title: "recipe1",
+//         description: "recipe1",
+//         portions: 1,
+//         ingredients: [
+//           {
+//             id: 1,
+//             title: "ingredient1",
+//             quantity: 1,
+//             unity: "kg",
+//           },
+//         ],
+//       },
+//     ],
+//     lastAlterationDate:{
+//       _seconds: 1620000000
+//     }
+//   },
+//   {
+//     title: "Lista 1",
+//     id: 1,
+//     recipes: [
+//       {
+//         id: 1,
+//         title: "recipe1",
+//         description: "recipe1",
+//         portions: 1,
+//         ingredients: [
+//           {
+//             id: 1,
+//             title: "ingredient1",
+//             quantity: 1,
+//             unity: "kg",
+//           },
+//         ],
+//       },
+//     ],
+//     lastAlterationDate:{
+//       _seconds: 1620000000
+//     }
+//   },
+//   {
+//     title: "Lista 1",
+//     id: 1,
+//     recipes: [
+//       {
+//         id: 1,
+//         title: "recipe1",
+//         description: "recipe1",
+//         portions: 1,
+//         ingredients: [
+//           {
+//             id: 1,
+//             title: "ingredient1",
+//             quantity: 1,
+//             unity: "kg",
+//           },
+//         ],
+//       },
+//     ],
+//     lastAlterationDate:{
+//       _seconds: 1620000000
+//     }
+//   },
+// ];
 
 const data = [
   {
@@ -330,21 +332,11 @@ const UserPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const auth = getAuth();
   const navigation = useNavigate();
-
-  const list = () => {
-    return lists.map((list) => <ListCard checked={false} list={list} hasCheck={false} />);
-  };
-      // Código para gerar o token usando Firebase
   
-
-  const token = useMemo(async () => {
-    const tokenId = await auth.currentUser?.getIdToken();
-    //console.log(tokenId)
-    return tokenId;
+  const token = useMemo(() => {
+    return auth.currentUser?.getIdToken();
   }, [auth]);
 
-
-  // Use o token para fazer a consulta quando ele estiver disponível
   const { data: user } = useQuery(
     "USER",
     async () => {
@@ -358,8 +350,28 @@ const UserPage = () => {
       onError: (error) => alert(error),
     }
   );
+  
+  // puxar as favoritas do usuário
+  const { data: lists } = useQuery(
+    "LISTS",
+    async () => {
+      return api.get(`/lists`, {
+        headers: {
+          Authorization: `${await token}`,
+        },
+      });
+    },
+    {
+      onError: (error: AxiosError) => {
+        if(error.response?.status !== 404) 
+          alert(error)
+      },
+    }
+  );
 
-
+  const list = () => {
+    return lists?.data.map((list: List) => <ListCard checked={false} list={list} hasCheck={false} />);
+  };
   
   const recipes = () => {
     const handleClose = () => {
@@ -393,7 +405,7 @@ const UserPage = () => {
           <PageSubTitle>{user?.data.email}</PageSubTitle>
         </Header>
         <Body>
-          <Carousel title={"Listas Favoritas"} handleSlides={list} />
+          {lists?.data && <Carousel title={"Listas Favoritas"} handleSlides={list} />}
           <Carousel title={"Receitas Favoritas"} handleSlides={recipes} />
         </Body>
       </Container>
