@@ -355,7 +355,7 @@ const UserPage = () => {
   const { data: lists } = useQuery(
     "LISTS",
     async () => {
-      return api.get(`/lists`, {
+      return api.get(`/shoplists`, {
         headers: {
           Authorization: `${await token}`,
         },

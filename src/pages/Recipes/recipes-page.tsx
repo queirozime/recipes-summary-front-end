@@ -174,7 +174,7 @@ const RecipesPage = () => {
       <CardReceipe
         key={recipe.id}
         name={recipe.title}
-        img={recipeUrls[index] || "https://assets.unileversolutions.com/recipes-v2/232988.jpg"}
+        img={recipeUrls[index]}
         portions={recipe.basePortion}
         id={recipe.id}
         handleShow={handleShow}
