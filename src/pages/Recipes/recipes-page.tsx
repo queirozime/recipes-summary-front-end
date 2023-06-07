@@ -89,7 +89,6 @@ const RecipesPage = () => {
   const navigation = useNavigate();
   const [selectedRecipeIds, setSelectedRecipeIds] = useState<string[]>([]);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false);
-  const [recipeUrls, setRecipeUrls] = useState<string[]>([]);
 
   const { data } = useQuery('RECIPES', async () => {
     return api.get(`/recipes/all`)
@@ -104,13 +103,14 @@ const RecipesPage = () => {
     [data]
   );
 
-  useEffect(() => {
-    const fetchRecipeUrls = async () => {
-      const urls: string[] = [];
   
-      if (recipes) {
-        for (const recipe of recipes) {
-          const filePath = recipe.imageUrl;
+const { data: recipeUrls, isLoading, isError } = useQuery('recipeUrls', async () => {
+    const urls = [];
+  
+    if (recipes) {
+      for (const recipe of recipes) {
+        const filePath = recipe.imageUrl;
+        if (filePath) {
           const starsRef = ref(storage, filePath);
   
           try {
@@ -121,16 +121,18 @@ const RecipesPage = () => {
           }
         }
       }
+    }
   
-      setRecipeUrls(urls);
-    };
-  
-    fetchRecipeUrls();
-  }, [recipes]);
+    return urls;
+  }, {
+    enabled: Boolean(recipes),
+  });
 
+  var urlsImage = [] as string[];
+  if(recipeUrls)
+    urlsImage = recipeUrls;
 
   const storage = getStorage();
-
   
   const handleClose = () => {
     navigation("/");
@@ -174,7 +176,7 @@ const RecipesPage = () => {
       <CardReceipe
         key={recipe.id}
         name={recipe.title}
-        img={recipeUrls[index]}
+        img={urlsImage[index]}
         portions={recipe.basePortion}
         id={recipe.id}
         handleShow={handleShow}
