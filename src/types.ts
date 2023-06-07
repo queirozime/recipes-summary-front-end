@@ -11,6 +11,7 @@ export interface Recipe {
     basePortion: number;
     imageUrl: string;
     instructions: string[];
+    preparationTime: number;
 }
 export interface List {
     title: string;
