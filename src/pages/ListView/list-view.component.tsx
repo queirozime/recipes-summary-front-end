@@ -65,10 +65,11 @@ const ListView = () => {
         return total 
     }
 
-    const updateList = async (id:string) => {
-        return api.patch(`/shoplists/${id}`, {
+    const updateList = async (id:string):Promise<List> => {
+        let request = await api.patch(`/shoplists/${id}`, {
             recipes: currList['recipes'],
         })
+        return request.data
     }
     const csvData = currList?.ingredients?.map((item) => {
         let actualQty = getQuantity(item.name,item.unit) 
@@ -112,11 +113,10 @@ const ListView = () => {
         });
     }
     
-    const handleSubmitList = () => {
+    const handleSubmitList =async () => {
         if(isEdit){
-            console.log(currList);
-            updateList(currList.id)
-            navigate('/lists')
+            let newList = await updateList(data.shoplistId)
+            setList(newList)
         }
         setIsEdit(!isEdit)
     }
@@ -191,7 +191,7 @@ const ListView = () => {
                                         <td>{item.name}</td>
                                         {isEdit?
                                         <td>{actualQty? actualQty:"-"}</td>
-                                        :<td>{item.qty}</td>
+                                        :<td>{item.qty?item.qty:"-"}</td>
                                         }
                                         <td>{item.unit}</td>
                                     </tr>)
