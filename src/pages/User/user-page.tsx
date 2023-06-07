@@ -14,324 +14,24 @@ import CardRecipe from "./component/card-carousel";
 
 import Carousel from "./component/carousel";
 import api from "../../http-client";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { getAuth } from "firebase/auth";
-import { List } from "../../types";
+import { List, Recipe } from "../../types";
 import { AxiosError } from "axios";
 import { Header } from "./user-page.styles";
-
-// const lists = [
-//   {
-//     title: "Lista 1",
-//     id: 1,
-//     recipes: [
-//       {
-//         id: 1,
-//         title: "recipe1",
-//         description: "recipe1",
-//         portions: 1,
-//         ingredients: [
-//           {
-//             id: 1,
-//             title: "ingredient1",
-//             quantity: 1,
-//             unity: "kg",
-//           },
-//         ],
-//       },
-//     ],
-//     lastAlterationDate:{
-//       _seconds: 1620000000
-//     }
-//   },
-//   {
-//     title: "Lista 1",
-//     id: 1,
-//     recipes: [
-//       {
-//         id: 1,
-//         title: "recipe1",
-//         description: "recipe1",
-//         portions: 1,
-//         ingredients: [
-//           {
-//             id: 1,
-//             title: "ingredient1",
-//             quantity: 1,
-//             unity: "kg",
-//           },
-//         ],
-//       },
-//     ],
-//     lastAlterationDate:{
-//       _seconds: 1620000000
-//     }
-//   },
-//   {
-//     title: "Lista 1",
-//     id: 1,
-//     recipes: [
-//       {
-//         id: 1,
-//         title: "recipe1",
-//         description: "recipe1",
-//         portions: 1,
-//         ingredients: [
-//           {
-//             id: 1,
-//             title: "ingredient1",
-//             quantity: 1,
-//             unity: "kg",
-//           },
-//         ],
-//       },
-//     ],
-//     lastAlterationDate:{
-//       _seconds: 1620000000
-//     }
-//   },
-//   {
-//     title: "Lista 1",
-//     id: 1,
-//     recipes: [
-//       {
-//         id: 1,
-//         title: "recipe1",
-//         description: "recipe1",
-//         portions: 1,
-//         ingredients: [
-//           {
-//             id: 1,
-//             title: "ingredient1",
-//             quantity: 1,
-//             unity: "kg",
-//           },
-//         ],
-//       },
-//     ],
-//     lastAlterationDate:{
-//       _seconds: 1620000000
-//     }
-//   },
-//   {
-//     title: "Lista 1",
-//     id: 1,
-//     recipes: [
-//       {
-//         id: 1,
-//         title: "recipe1",
-//         description: "recipe1",
-//         portions: 1,
-//         ingredients: [
-//           {
-//             id: 1,
-//             title: "ingredient1",
-//             quantity: 1,
-//             unity: "kg",
-//           },
-//         ],
-//       },
-//     ],
-//     lastAlterationDate:{
-//       _seconds: 1620000000
-//     }
-//   },
-//   {
-//     title: "Lista 1",
-//     id: 1,
-//     recipes: [
-//       {
-//         id: 1,
-//         title: "recipe1",
-//         description: "recipe1",
-//         portions: 1,
-//         ingredients: [
-//           {
-//             id: 1,
-//             title: "ingredient1",
-//             quantity: 1,
-//             unity: "kg",
-//           },
-//         ],
-//       },
-//     ],
-//     lastAlterationDate:{
-//       _seconds: 1620000000
-//     }
-//   },
-//   {
-//     title: "Lista 1",
-//     id: 1,
-//     recipes: [
-//       {
-//         id: 1,
-//         title: "recipe1",
-//         description: "recipe1",
-//         portions: 1,
-//         ingredients: [
-//           {
-//             id: 1,
-//             title: "ingredient1",
-//             quantity: 1,
-//             unity: "kg",
-//           },
-//         ],
-//       },
-//     ],
-//     lastAlterationDate:{
-//       _seconds: 1620000000
-//     }
-//   },
-// ];
-
-const data = [
-  {
-    id: "500",
-    title: "Omelete de Frango",
-    portion: "1",
-    ingredients: [
-      {
-        name: "ovo",
-        qtd: "2",
-        unit: "unidade",
-      },
-      {
-        name: "frango desfiado",
-        qtd: "1",
-        unit: "grama",
-      },
-      {
-        name: "manteiga",
-        qtd: "50",
-        unit: "grama",
-      },
-      {
-        name: "orégano",
-        qtd: "1",
-        unit: "colher de sopa",
-      },
-    ],
-    instructions: [
-      "Quebre os dois ovos em uma vasilha e bata bem até se formar uma mistura amarelada e uniforme.",
-      "Adicione à mistura o frango desfiado e o orégano.",
-      "Esquente a manteiga na frigideira.",
-      "Despeje na frigideira os ovos misturados com frango e orégano.",
-      "Mexa constantemente para evitar que o omelete grude na panela.",
-      "Após ficar consistente, tire do fogo.",
-    ],
-  },
-  {
-    id: "501",
-    title: "Omelete de Frango",
-    portion: "1",
-    ingredients: [
-      {
-        name: "ovo",
-        qtd: "2",
-        unit: "unidade",
-      },
-      {
-        name: "frango desfiado",
-        qtd: "1",
-        unit: "grama",
-      },
-      {
-        name: "manteiga",
-        qtd: "50",
-        unit: "grama",
-      },
-      {
-        name: "orégano",
-        qtd: "1",
-        unit: "colher de sopa",
-      },
-    ],
-    instructions: [
-      "Quebre os dois ovos em uma vasilha e bata bem até se formar uma mistura amarelada e uniforme.",
-      "Adicione à mistura o frango desfiado e o orégano.",
-      "Esquente a manteiga na frigideira.",
-      "Despeje na frigideira os ovos misturados com frango e orégano.",
-      "Mexa constantemente para evitar que o omelete grude na panela.",
-      "Após ficar consistente, tire do fogo.",
-    ],
-  },
-  {
-    id: "502",
-    title: "Omelete de Frango",
-    portion: "1",
-    ingredients: [
-      {
-        name: "ovo",
-        qtd: "2",
-        unit: "unidade",
-      },
-      {
-        name: "frango desfiado",
-        qtd: "1",
-        unit: "grama",
-      },
-      {
-        name: "manteiga",
-        qtd: "50",
-        unit: "grama",
-      },
-      {
-        name: "orégano",
-        qtd: "1",
-        unit: "colher de sopa",
-      },
-    ],
-    instructions: [
-      "Quebre os dois ovos em uma vasilha e bata bem até se formar uma mistura amarelada e uniforme.",
-      "Adicione à mistura o frango desfiado e o orégano.",
-      "Esquente a manteiga na frigideira.",
-      "Despeje na frigideira os ovos misturados com frango e orégano.",
-      "Mexa constantemente para evitar que o omelete grude na panela.",
-      "Após ficar consistente, tire do fogo.",
-    ],
-  },
-  {
-    id: "503",
-    title: "Omelete de Frango",
-    portion: "1",
-    ingredients: [
-      {
-        name: "ovo",
-        qtd: "2",
-        unit: "unidade",
-      },
-      {
-        name: "frango desfiado",
-        qtd: "1",
-        unit: "grama",
-      },
-      {
-        name: "manteiga",
-        qtd: "50",
-        unit: "grama",
-      },
-      {
-        name: "orégano",
-        qtd: "1",
-        unit: "colher de sopa",
-      },
-    ],
-    instructions: [
-      "Quebre os dois ovos em uma vasilha e bata bem até se formar uma mistura amarelada e uniforme.",
-      "Adicione à mistura o frango desfiado e o orégano.",
-      "Esquente a manteiga na frigideira.",
-      "Despeje na frigideira os ovos misturados com frango e orégano.",
-      "Mexa constantemente para evitar que o omelete grude na panela.",
-      "Após ficar consistente, tire do fogo.",
-    ],
-  },
-];
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { Index } from "firebase/firestore";
 
 const UserPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [recipeUrls, setRecipeUrls] = useState<string[]>([]);
+  
+
   const auth = getAuth();
   const navigation = useNavigate();
+  const storage = getStorage();
+
   
   const token = useMemo(() => {
     return auth.currentUser?.getIdToken();
@@ -350,7 +50,19 @@ const UserPage = () => {
       onError: (error) => alert(error),
     }
   );
-  
+  const { data: favoriteRecipes } = useQuery(
+    "RecipeFav",
+    async () => {
+      return api.get(`/recipes/favorite/all`, {
+        headers: {
+          Authorization: `${await token}`,
+        },
+      });
+    },
+    {
+      onError: (error) => alert(error),
+    }
+  );
   // puxar as favoritas do usuário
   const { data: lists } = useQuery(
     "LISTS",
@@ -368,6 +80,34 @@ const UserPage = () => {
       },
     }
   );
+  const favRecipes = useMemo(
+    () => favoriteRecipes?.data,
+    [favoriteRecipes]
+  );
+
+  useEffect(() => {
+    const fetchRecipeUrls = async () => {
+      const urls: string[] = [];
+  
+      if (favRecipes) {
+        for (const recipe of favRecipes) {
+          const filePath = recipe.imageUrl;
+          const starsRef = ref(storage, filePath);
+
+          try {
+            const url = await getDownloadURL(starsRef);
+            urls.push(url);
+          } catch (error) {
+            console.error("Erro ao obter a URL pública:", error);
+          }
+        }
+      }
+  
+      setRecipeUrls(urls);
+    };
+  
+    fetchRecipeUrls();
+  }, [favRecipes]);
 
   const list = () => {
     return lists?.data.map((list: List) => <ListCard checked={false} list={list} hasCheck={false} />);
@@ -382,12 +122,12 @@ const UserPage = () => {
       setSearchParams({ id });
     };
 
-    return data.map((receipe) => {
+    return favoriteRecipes?.data.map((receipe: Recipe,index:number) => {
       return (
         <CardRecipe
           name={receipe.title}
-          img="https://assets.unileversolutions.com/recipes-v2/232988.jpg"
-          portions={receipe.portion}
+          img={recipeUrls[index]}
+          portions={Number(receipe.portion)}
           id={receipe.id}
           handleShow={handleShow}
           handleClose={handleClose}

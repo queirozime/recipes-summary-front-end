@@ -86,10 +86,22 @@ const ListView = () => {
             recipes: newRecipes
         });
     }
+    const getQuantity = (name: string , unit: string)=>{
+        let total = 0.0
+        for (let recipe of currList?.recipes){
+            for(let ingredient of recipe?.ingredients){
+                if(ingredient.name === name && ingredient.unit === unit){
+                    let portion = recipe.portion || 1
+                    total += ingredient.qty  * ( portion/recipe.basePortion  - 1 )
+                }
+            }
 
+        }
+        return total 
+    }
     const handleSubmitList = () => {
         console.log(currList);
-        navigate('/lists');
+        navigate('/lists')
     }
     
 
@@ -145,13 +157,14 @@ const ListView = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data?.ingredients?.map((item: Ingredient, index: number) => (
-                                    <tr key={index}>
+                                    {data?.ingredients?.map((item: Ingredient, index: number) => {
+                                    let offQty = getQuantity(item.name,item.unit) 
+                                    return (<tr key={index}>
                                         <td>{item.name}</td>
-                                        <td>{item.qty}</td>
+                                        <td>{item.qty?item.qty + offQty:null}</td>
                                         <td>{item.unit}</td>
-                                    </tr>
-                                    ))}
+                                    </tr>)
+                                    })}
                                 </tbody>
                             </StyledTable>
                         </TableContainer>

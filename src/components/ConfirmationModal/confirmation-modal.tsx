@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { Background } from "../modalReceitas/modal-style"
 import { Recipe } from "../../types"
-import { ButtonRow, Input, InputWrapper, Modal, ModalContent, RecipeWrapper, RecipesList } from "./confirmation-modal.styles"
+import { ButtonRow, Input, InputWrapper,InputPortion, Modal, ModalContent, RecipeWrapper, RecipesList } from "./confirmation-modal.styles"
 import { Button } from "../Navbar/nav-styles"
 import api from "../../http-client"
 import { getAuth } from "firebase/auth"
@@ -16,16 +16,30 @@ interface ConfirmationModalProps {
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onOpenChange, data }) => {
     const auth = getAuth();
     const [listName, setListName] = React.useState<string>('')
+    const [recipeData, setRecipeData] = React.useState<Recipe[]>()
     
     const token = useMemo(() => {
         return auth.currentUser?.getIdToken();
       }, [auth]);
 
+    const handleChangePortion = (recipeId: string,portionRates: string) => {
+        let portionRate = Number(portionRates)
+        const newRecipes = recipeData?.map((recipe) => {
+            if(recipe.id === recipeId && portionRate > 0) {
+                return {
+                    ...recipe,
+                    portion: recipe.basePortion * portionRate
+                }
+            }
+            return recipe;
+        });
+        setRecipeData(newRecipes);
+    }
     const createList = async () => {
         return api.post('/shoplists/create', {
             title: listName,
             favorite: false,
-            recipes: data,
+            recipes: recipeData,
             token: await token,
         })
     }
@@ -52,7 +66,12 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onOpenCha
                             <RecipesList>
                                 {data.map((recipe: Recipe) => (
                                     <RecipeWrapper>
-                                        <li>{recipe.title}</li>
+                                        <li>{recipe.title} {" x"}</li>
+                                        <InputPortion
+                                            type="numeric"
+                                            value={recipe.portion/recipe.basePortion || 1}
+                                            onChange={(e) => handleChangePortion(recipe.id,(e.target.value))}
+                                        />
                                     </RecipeWrapper>
                                 ))}
                             </RecipesList>
