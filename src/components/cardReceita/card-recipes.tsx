@@ -50,17 +50,17 @@ const CardRecipe: React.FC<CardProps> = ({
   const { currentUser } = getAuth();
   const favoriteRecipe = async () => {
       console.log(await currentUser?.getIdToken())
-      await api.post(`/recipes/favorite/${id}`, {
+      await api.post(`/recipes/favorite/${id}`,{}, {
         headers: {
-          Authorization: await currentUser?.getIdToken()
+          'Authorization': await currentUser?.getIdToken()
         }
       })
   }
 
-  const desfavoriteRecipe = async () => {
+  const disfavorRecipe = async () => {
     await api.delete(`/recipes/disfavor/${id}`, {
       headers: {
-        Authorization: await currentUser?.getIdToken()
+        'Authorization': await currentUser?.getIdToken()
       }
     })
   }
@@ -91,7 +91,7 @@ const CardRecipe: React.FC<CardProps> = ({
                 onClick={(e) => {
                   handleClose();
                   if(isFav){
-                    desfavoriteRecipe()
+                    disfavorRecipe()
                   }
                   else{
                     favoriteRecipe()
