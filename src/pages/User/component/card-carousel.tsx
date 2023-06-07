@@ -17,7 +17,7 @@ import { StarBorder, Star, Restaurant } from "@material-ui/icons";
 interface CardProps {
   name: string;
   img: string;
-  portions: string;
+  portions: number;
   id: string;
   handleShow: (id: string) => void;
   handleClose: () => void;

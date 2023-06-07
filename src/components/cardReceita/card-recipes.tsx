@@ -15,6 +15,9 @@ import {
 } from "./card-styles";
 import { Icon } from "@material-ui/core";
 import { Check, StarBorder, Star, Restaurant } from "@material-ui/icons";
+import api from "../../http-client";
+import { getAuth } from "firebase/auth";
+
 interface CardProps {
   name: string;
   img: string;
@@ -42,7 +45,26 @@ const CardRecipe: React.FC<CardProps> = ({
   const nameLimitado =
     frase.length > limiteCaracteres
       ? frase.slice(0, limiteCaracteres) + "..."
-      : frase;
+      : frase
+
+  const { currentUser } = getAuth();
+  const favoriteRecipe = async () => {
+      console.log(await currentUser?.getIdToken())
+      await api.post(`/recipes/favorite/${id}`, {
+        headers: {
+          Authorization: await currentUser?.getIdToken()
+        }
+      })
+  }
+
+  const desfavoriteRecipe = async () => {
+    await api.delete(`/recipes/disfavor/${id}`, {
+      headers: {
+        Authorization: await currentUser?.getIdToken()
+      }
+    })
+  }
+
   return (
     <CardContainer>
       <Card>
@@ -68,7 +90,14 @@ const CardRecipe: React.FC<CardProps> = ({
               <FavIcon
                 onClick={(e) => {
                   handleClose();
+                  if(isFav){
+                    desfavoriteRecipe()
+                  }
+                  else{
+                    favoriteRecipe()
+                  }
                   setIsFav(!isFav);
+                  
                   e.stopPropagation();
                 }}
               >

@@ -58,6 +58,16 @@ export const InputWrapper = styled.div`
   margin: 1.5rem 0;
 `;
 
+export const InputPortion = styled.input`
+  width: 1%;
+  height: 2rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  margin: 1 rem 0;
+  margin-left: 1rem;
+`;
+
 export const RecipeWrapper = styled.div`
   display: flex;
   flex-direction: row;
