@@ -22,7 +22,6 @@ import { useQuery } from "react-query";
 import { Group, Watch } from "@material-ui/icons";
 import { Ingredient, Recipe } from "../../types";
 import api from "../../http-client";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 interface ModalProps {
   handleClose: () => void;
@@ -32,7 +31,6 @@ interface ModalProps {
 const ModalRecipe: React.FC<ModalProps> = ({ handleClose, handleAddRecipe }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const isOpen = useMemo(() => searchParams.has("id"), [searchParams]);
-  const [imageUrl,setImageUrl] = useState('');
 
   const { data } = useQuery('RECIPE', async () => {
     return api.get(`/recipes/${searchParams.get("id")}`)
@@ -42,28 +40,7 @@ const ModalRecipe: React.FC<ModalProps> = ({ handleClose, handleAddRecipe }) => 
         enabled: isOpen,
     }
   );
-  const storage = getStorage();
   const recipe: Recipe = useMemo(() => data?.data, [data]);
-  
-  useEffect(()=>{
-    const loadImage = async () =>{
-      if (recipe) {
-        const filePath = recipe.imageUrl;
-        if (filePath) {
-          const starsRef = ref(storage, filePath);
-  
-          try {
-            const url = await getDownloadURL(starsRef);
-            setImageUrl(url);
-          } catch (error) {
-            console.error("Erro ao obter a URL pública:", error);
-          }
-        }
-      }
-    }
-    loadImage();
-
-  },[recipe])
   
   const getIngredientText = (ingredient: Ingredient) => {
     if (ingredient.qty !== null)
@@ -73,11 +50,11 @@ const ModalRecipe: React.FC<ModalProps> = ({ handleClose, handleAddRecipe }) => 
 
   return isOpen ? (
     <>
-      <Background onClick={()=>{; setImageUrl('');handleClose()}} />
+      <Background onClick={handleClose} />
       <Modal>
         <Header>
           <ImageWrapper>
-            <Image src={imageUrl} />
+            <Image src={recipe?.imageUrl} />
           </ImageWrapper>
           <HeaderText>
             <HeaderTitle>{recipe?.title}</HeaderTitle>
