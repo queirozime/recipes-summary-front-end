@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Header,
   Image,
@@ -21,6 +21,7 @@ import { useQuery } from "react-query";
 import { Settings, Group } from "@material-ui/icons";
 import { Ingredient, Recipe } from "../../types";
 import api from "../../http-client";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 interface ModalProps {
   handleClose: () => void;
@@ -96,6 +97,7 @@ const dataFake2 = {
 const ModalRecipe: React.FC<ModalProps> = ({ handleClose, handleAddRecipe }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const isOpen = useMemo(() => searchParams.has("id"), [searchParams]);
+  const [imageUrl,setImageUrl] = useState('');
 
   const { data } = useQuery('RECIPE', async () => {
     return api.get(`/recipes/${searchParams.get("id")}`)
@@ -105,8 +107,29 @@ const ModalRecipe: React.FC<ModalProps> = ({ handleClose, handleAddRecipe }) => 
         enabled: isOpen,
     }
   );
-
+  const storage = getStorage();
   const recipe: Recipe = useMemo(() => data?.data, [data]);
+  
+  useEffect(()=>{
+    const loadImage = async () =>{
+      if (recipe) {
+        const filePath = recipe.imageUrl;
+        if (filePath) {
+          const starsRef = ref(storage, filePath);
+  
+          try {
+            const url = await getDownloadURL(starsRef);
+            setImageUrl(url);
+          } catch (error) {
+            console.error("Erro ao obter a URL pública:", error);
+          }
+        }
+      }
+    }
+    loadImage();
+
+  },[recipe])
+  
   const getIngredientText = (ingredient: Ingredient) => {
     if (ingredient.qty !== null)
       return `${ingredient.qty} ${ingredient.unit} de ${ingredient.name}`;
@@ -115,10 +138,10 @@ const ModalRecipe: React.FC<ModalProps> = ({ handleClose, handleAddRecipe }) => 
 
   return isOpen ? (
     <>
-      <Background onClick={handleClose} />
+      <Background onClick={()=>{; setImageUrl('');handleClose()}} />
       <Modal>
         <Header>
-          <Image src={recipe?.imageUrl} />
+          <Image src={imageUrl} />
           <HeaderText>
             <HeaderTitle>{recipe?.title}</HeaderTitle>
             <HeaderColumns>
