@@ -41,7 +41,7 @@ const CardRecipe: React.FC<CardProps> = ({
 }) => {
   const [isFav, setIsFav] = useState(false);
   const frase = name;
-  const limiteCaracteres = 24;
+  const limiteCaracteres = 22;
   const nameLimitado =
     frase.length > limiteCaracteres
       ? frase.slice(0, limiteCaracteres) + "..."
@@ -104,12 +104,12 @@ const CardRecipe: React.FC<CardProps> = ({
                 {isFav ? (
                   <Icon
                     component={Star}
-                    style={{ color: "#ECDD58", fontSize: 15 }}
+                    style={{ color: "#ECDD58", fontSize: 20, marginLeft:5 }}
                   />
                 ) : (
                   <Icon
                     component={StarBorder}
-                    style={{ color: "black", fontSize: 15 }}
+                    style={{ color: "black", fontSize: 20, marginLeft:5 }}
                   />
                 )}
               </FavIcon>
