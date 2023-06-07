@@ -103,37 +103,6 @@ const RecipesPage = () => {
     [data]
   );
 
-  
-const { data: recipeUrls, isLoading, isError } = useQuery('recipeUrls', async () => {
-    const urls = [];
-  
-    if (recipes) {
-      for (const recipe of recipes) {
-        const filePath = recipe.imageUrl;
-        if (filePath) {
-          const starsRef = ref(storage, filePath);
-  
-          try {
-            const url = await getDownloadURL(starsRef);
-            urls.push(url);
-          } catch (error) {
-            console.error("Erro ao obter a URL pública:", error);
-          }
-        }
-      }
-    }
-  
-    return urls;
-  }, {
-    enabled: Boolean(recipes),
-  });
-
-  var urlsImage = [] as string[];
-  if(recipeUrls)
-    urlsImage = recipeUrls;
-
-  const storage = getStorage();
-  
   const handleClose = () => {
     navigation("/");
   };
@@ -176,7 +145,7 @@ const { data: recipeUrls, isLoading, isError } = useQuery('recipeUrls', async ()
       <CardReceipe
         key={recipe.id}
         name={recipe.title}
-        img={urlsImage[index]}
+        img={recipe.imageUrl}
         portions={recipe.basePortion}
         id={recipe.id}
         handleShow={handleShow}
