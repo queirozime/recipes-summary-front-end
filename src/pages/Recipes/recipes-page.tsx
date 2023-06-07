@@ -1,5 +1,4 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-
 import { Button, NavWrapper } from "../../components/Navbar/nav-styles";
 import CardReceipe from "../../components/cardReceita/card-recipes";
 import VerticalNavbar from "../../components/Navbar/vertical-navbar-component";
@@ -8,8 +7,9 @@ import { Container, Header, PageTitle, Body } from "./recipes-page-styles";
 import { useQuery } from "react-query";
 import api from "../../http-client";
 import { Recipe } from "../../types";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ConfirmationModal from "../../components/ConfirmationModal/confirmation-modal";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 // const data = [
 //   {
@@ -89,6 +89,7 @@ const RecipesPage = () => {
   const navigation = useNavigate();
   const [selectedRecipeIds, setSelectedRecipeIds] = useState<string[]>([]);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false);
+  const [recipeUrls, setRecipeUrls] = useState<string[]>([]);
 
   const { data } = useQuery('RECIPES', async () => {
     return api.get(`/recipes/all`)
@@ -97,11 +98,40 @@ const RecipesPage = () => {
         onError: (error) => alert(error),
     }
   );
+  
   const recipes = useMemo(
     () => data?.data,
     [data]
   );
 
+  useEffect(() => {
+    const fetchRecipeUrls = async () => {
+      const urls: string[] = [];
+  
+      if (recipes) {
+        for (const recipe of recipes) {
+          const filePath = recipe.imageUrl;
+          const starsRef = ref(storage, filePath);
+  
+          try {
+            const url = await getDownloadURL(starsRef);
+            urls.push(url);
+          } catch (error) {
+            console.error("Erro ao obter a URL pública:", error);
+          }
+        }
+      }
+  
+      setRecipeUrls(urls);
+    };
+  
+    fetchRecipeUrls();
+  }, [recipes]);
+
+
+  const storage = getStorage();
+
+  
   const handleClose = () => {
     navigation("/");
   };
@@ -115,6 +145,7 @@ const RecipesPage = () => {
       setSelectedRecipeIds([...selectedRecipeIds, id]);
     }
   };
+  
 
   return (
     <NavWrapper>
@@ -139,22 +170,19 @@ const RecipesPage = () => {
           </Button>
         </Header>
         <Body>
-          {recipes?.map((recipe: Recipe) => {
-            return (
-              <>
-                <CardReceipe
-                  name={recipe.title}
-                  img={"https://assets.unileversolutions.com/recipes-v2/232988.jpg"}
-                  portions={recipe.basePortion}
-                  id={recipe.id}
-                  handleShow={handleShow}
-                  handleClose={handleClose}
-                  checked={selectedRecipeIds.includes(recipe.id)}
-                  onCheckChange={handleCheckChange}
-                />
-              </>
-            );
-          })}
+        {recipes?.map((recipe: Recipe, index: number) => (
+      <CardReceipe
+        key={recipe.id}
+        name={recipe.title}
+        img={recipeUrls[index] || "https://assets.unileversolutions.com/recipes-v2/232988.jpg"}
+        portions={recipe.basePortion}
+        id={recipe.id}
+        handleShow={handleShow}
+        handleClose={handleClose}
+        checked={selectedRecipeIds.includes(recipe.id)}
+        onCheckChange={handleCheckChange}
+      />
+    ))}
         </Body>
       </Container>
     </NavWrapper>
