@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { NavWrapper } from "../../components/Navbar/nav-styles";
+import { Button, NavWrapper } from "../../components/Navbar/nav-styles";
 import VerticalNavbar from "../../components/Navbar/vertical-navbar-component";
 import {
   Container,
@@ -17,7 +17,7 @@ import { useQuery } from "react-query";
 import { List, Recipe } from "../../types";
 import { AxiosError } from "axios";
 import { Header } from "./user-page.styles";
-import {auth} from "../../firebase";
+import {auth, logout} from "../../firebase";
 
 
 
@@ -117,6 +117,12 @@ const UserPage = () => {
     });
   };
 
+  const handleLogout = () => {
+    logout();
+    localStorage.setItem('user', "");
+    navigation("/");
+  };
+
   return (
     <NavWrapper>
       <VerticalNavbar />
@@ -124,6 +130,11 @@ const UserPage = () => {
         <Header>
           <PageTitle>{user?.data.name}</PageTitle>
           <PageSubTitle>{user?.data.email}</PageSubTitle>
+          <Button 
+            onClick={handleLogout}
+          >
+            Sair
+          </Button>
         </Header>
         <Body>
           {lists?.data && <Carousel title={"Listas Favoritas"} handleSlides={list} />}
