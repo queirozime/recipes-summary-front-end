@@ -51,7 +51,6 @@ const CardRecipe: React.FC<CardProps> = ({
 
   const { currentUser } = getAuth();
   const favoriteRecipe = async () => {
-      console.log(await currentUser?.getIdToken())
       await api.post(`/recipes/favorite/${id}`,{}, {
         headers: {
           'Authorization': await currentUser?.getIdToken()
