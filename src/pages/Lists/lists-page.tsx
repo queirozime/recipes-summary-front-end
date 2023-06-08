@@ -13,14 +13,32 @@ const ListsPage = () => {
         name: string;
         shoplistId: string;
         recipes: any;
+        favorite?:boolean;
     }
     const [load,setLoad] = useState(false);
     const [selectedListsIds, setSelectedListsIds] = useState<string[]>([]);
-    const checkList = (list: List) => {
+    const favorite =  async (id:string) => {
+        return api.patch(`/shoplists/favorite/${id}`, {
+            headers: {
+                Authorization: `${await token()}`,
+            }
+        })
+    }
+    const desfavorite =  async (id:string) => {
+        return api.patch(`/shoplists/disfavor/${id}`, {
+            headers: {
+                Authorization: `${await token()}`,
+            }
+        })
+    }
+
+    const checkList = async (list: List) => {
         if(selectedListsIds.includes(list.shoplistId)) {
             setSelectedListsIds(selectedListsIds.filter((item) => item !== list.shoplistId));
+            await desfavorite(list.shoplistId)
         } else {
             setSelectedListsIds([...selectedListsIds, list.shoplistId]);
+            await favorite(list.shoplistId)
         }
     }
 
@@ -54,6 +72,16 @@ const ListsPage = () => {
         }
     );
     const lists = data?.data || [];
+
+    useEffect(()=>{
+        for (let list of lists) {
+            if(list.favorite) {
+                let aux = selectedListsIds;
+                aux.push(list.shoplistId)
+                setSelectedListsIds(aux);
+            }
+        }
+    },[data])
     return (
         <NavWrapper>
             <VerticalNavbar />

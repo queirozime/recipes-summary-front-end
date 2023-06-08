@@ -18,5 +18,6 @@ export interface List {
     id: string;
     recipes: Recipe[];
     ingredients: Ingredient[];
+    favorite?:boolean;
 }
 

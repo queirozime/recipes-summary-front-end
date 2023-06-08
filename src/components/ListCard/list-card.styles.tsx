@@ -38,3 +38,11 @@ export const CheckboxContainer = styled.div`
     align-items: center;
     justify-content: flex-start;
 `;
+export const FavIcon = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  border-width: 0px;
+  padding: 0px;
+`;
