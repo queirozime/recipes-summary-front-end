@@ -27,6 +27,7 @@ interface CardProps {
   handleClose: () => void;
   checked: boolean;
   onCheckChange: (id: string) => void;
+  favorite: boolean;
 }
 
 const CardRecipe: React.FC<CardProps> = ({
@@ -38,8 +39,9 @@ const CardRecipe: React.FC<CardProps> = ({
   handleClose,
   checked,
   onCheckChange,
+  favorite
 }) => {
-  const [isFav, setIsFav] = useState(false);
+  const [isFav, setIsFav] = useState(favorite);
   const frase = name;
   const limiteCaracteres = 22;
   const nameLimitado =

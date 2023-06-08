@@ -21,6 +21,7 @@ interface CardProps {
   id: string;
   handleShow: (id: string) => void;
   handleClose: () => void;
+  favorite:boolean;
 }
 
 const CardRecipe: React.FC<CardProps> = ({
@@ -30,6 +31,7 @@ const CardRecipe: React.FC<CardProps> = ({
   id,
   handleShow,
   handleClose,
+  favorite
 }) => {
   const [isFav, setIsFav] = useState(true);
   return (

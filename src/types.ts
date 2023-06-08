@@ -11,6 +11,8 @@ export interface Recipe {
     basePortion: number;
     imageUrl: string;
     instructions: string[];
+    preparationTime: number;
+    favorite: boolean;
 }
 export interface List {
     title: string;

@@ -122,15 +122,16 @@ const UserPage = () => {
       setSearchParams({ id });
     };
 
-    return favoriteRecipes?.data.map((receipe: Recipe,index:number) => {
+    return favoriteRecipes?.data.map((recipe: Recipe,index:number) => {
       return (
         <CardRecipe
-          name={receipe.title}
+          name={recipe.title}
           img={recipeUrls[index]}
-          portions={Number(receipe.portion)}
-          id={receipe.id}
+          portions={Number(recipe.portion)}
+          id={recipe.id}
           handleShow={handleShow}
           handleClose={handleClose}
+          favorite={recipe.favorite}
         />
       );
     });

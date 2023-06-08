@@ -10,6 +10,8 @@ import { Recipe } from "../../types";
 import { useEffect, useMemo, useState } from "react";
 import ConfirmationModal from "../../components/ConfirmationModal/confirmation-modal";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { getAuth } from "firebase/auth";
+
 
 // const data = [
 //   {
@@ -90,8 +92,21 @@ const RecipesPage = () => {
   const [selectedRecipeIds, setSelectedRecipeIds] = useState<string[]>([]);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false);
 
+const auth = getAuth();
+
+const token = useMemo(() => {
+  return auth.currentUser?.getIdToken();
+}, [auth]);
+
   const { data } = useQuery('RECIPES', async () => {
-    return api.get(`/recipes/all`)
+    console.log(token)
+    const recipes = api.get(`/recipes/all`, {
+      headers: {
+        Authorization: `${await token}`,
+      },
+    })
+    console.log((await recipes).data)
+    return recipes
     },
     {
         onError: (error) => alert(error),
@@ -183,6 +198,7 @@ const { data: recipeUrls, isLoading, isError } = useQuery('recipeUrls', async ()
         handleClose={handleClose}
         checked={selectedRecipeIds.includes(recipe.id)}
         onCheckChange={handleCheckChange}
+        favorite={recipe.favorite}
       />
     ))}
         </Body>
