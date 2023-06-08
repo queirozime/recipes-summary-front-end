@@ -27,6 +27,7 @@ interface CardProps {
   handleClose: () => void;
   checked: boolean;
   onCheckChange: (id: string) => void;
+  favorite: boolean;
 }
 
 const CardRecipe: React.FC<CardProps> = ({
@@ -38,10 +39,11 @@ const CardRecipe: React.FC<CardProps> = ({
   handleClose,
   checked,
   onCheckChange,
+  favorite,
 }) => {
-  const [isFav, setIsFav] = useState(false);
+  const [isFav, setIsFav] = useState(favorite);
   const frase = name;
-  const limiteCaracteres = 24;
+  const limiteCaracteres = 22;
   const nameLimitado =
     frase.length > limiteCaracteres
       ? frase.slice(0, limiteCaracteres) + "..."
@@ -49,17 +51,17 @@ const CardRecipe: React.FC<CardProps> = ({
 
   const { currentUser } = getAuth();
   const favoriteRecipe = async () => {
-      await api.post(`/recipes/favorite/${id}`, {
+      await api.post(`/recipes/favorite/${id}`,{}, {
         headers: {
-          Authorization: await currentUser?.getIdToken()
+          'Authorization': await currentUser?.getIdToken()
         }
       })
   }
 
-  const desfavoriteRecipe = async () => {
+  const disfavorRecipe = async () => {
     await api.delete(`/recipes/disfavor/${id}`, {
       headers: {
-        Authorization: await currentUser?.getIdToken()
+        'Authorization': await currentUser?.getIdToken()
       }
     })
   }
@@ -90,7 +92,7 @@ const CardRecipe: React.FC<CardProps> = ({
                 onClick={(e) => {
                   handleClose();
                   if(isFav){
-                    desfavoriteRecipe()
+                    disfavorRecipe()
                   }
                   else{
                     favoriteRecipe()
@@ -103,12 +105,12 @@ const CardRecipe: React.FC<CardProps> = ({
                 {isFav ? (
                   <Icon
                     component={Star}
-                    style={{ color: "#ECDD58", fontSize: 15 }}
+                    style={{ color: "#ECDD58", fontSize: 20, marginLeft:5 }}
                   />
                 ) : (
                   <Icon
                     component={StarBorder}
-                    style={{ color: "black", fontSize: 15 }}
+                    style={{ color: "black", fontSize: 20, marginLeft:5 }}
                   />
                 )}
               </FavIcon>

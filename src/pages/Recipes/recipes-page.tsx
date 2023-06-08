@@ -9,79 +9,8 @@ import api from "../../http-client";
 import { Recipe } from "../../types";
 import { useMemo, useState } from "react";
 import ConfirmationModal from "../../components/ConfirmationModal/confirmation-modal";
+import { getAuth } from "firebase/auth";
 
-// const data = [
-//   {
-//     id: "500",
-//     title: "Omelete de Frango",
-//     portion: "1",
-//     ingredients: [
-//       {
-//         name: "ovo",
-//         qtd: "2",
-//         unit: "unidade",
-//       },
-//       {
-//         name: "frango desfiado",
-//         qtd: "1",
-//         unit: "grama",
-//       },
-//       {
-//         name: "manteiga",
-//         qtd: "50",
-//         unit: "grama",
-//       },
-//       {
-//         name: "orégano",
-//         qtd: "1",
-//         unit: "colher de sopa",
-//       },
-//     ],
-//     instructions: [
-//       "Quebre os dois ovos em uma vasilha e bata bem até se formar uma mistura amarelada e uniforme.",
-//       "Adicione à mistura o frango desfiado e o orégano.",
-//       "Esquente a manteiga na frigideira.",
-//       "Despeje na frigideira os ovos misturados com frango e orégano.",
-//       "Mexa constantemente para evitar que o omelete grude na panela.",
-//       "Após ficar consistente, tire do fogo.",
-//     ],
-//   },
-//   {
-//     id: "501",
-//     title: "Omelete de Frango",
-//     portion: "1",
-//     ingredients: [
-//       {
-//         name: "ovo",
-//         qtd: "2",
-//         unit: "unidade",
-//       },
-//       {
-//         name: "frango desfiado",
-//         qtd: "1",
-//         unit: "grama",
-//       },
-//       {
-//         name: "manteiga",
-//         qtd: "50",
-//         unit: "grama",
-//       },
-//       {
-//         name: "orégano",
-//         qtd: "1",
-//         unit: "colher de sopa",
-//       },
-//     ],
-//     instructions: [
-//       "Quebre os dois ovos em uma vasilha e bata bem até se formar uma mistura amarelada e uniforme.",
-//       "Adicione à mistura o frango desfiado e o orégano.",
-//       "Esquente a manteiga na frigideira.",
-//       "Despeje na frigideira os ovos misturados com frango e orégano.",
-//       "Mexa constantemente para evitar que o omelete grude na panela.",
-//       "Após ficar consistente, tire do fogo.",
-//     ],
-//   },
-// ];
 
 const RecipesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -89,8 +18,20 @@ const RecipesPage = () => {
   const [selectedRecipeIds, setSelectedRecipeIds] = useState<string[]>([]);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false);
 
+const auth = getAuth();
+
+const token = useMemo(() => {
+  return auth.currentUser?.getIdToken();
+}, [auth]);
+
   const { data } = useQuery('RECIPES', async () => {
-    return api.get(`/recipes/all`)
+  
+    const recipes = api.get(`/recipes/all`, {
+      headers: {
+        Authorization: `${await token}`,
+      },
+    })
+    return recipes
     },
     {
         onError: (error) => alert(error),
@@ -101,6 +42,7 @@ const RecipesPage = () => {
     () => data?.data,
     [data]
   );
+  
 
   const handleClose = () => {
     navigation("/");
@@ -141,6 +83,7 @@ const RecipesPage = () => {
         </Header>
         <Body>
         {recipes?.map((recipe: Recipe, index: number) => (
+    
       <CardReceipe
         key={recipe.id}
         name={recipe.title}
@@ -151,6 +94,7 @@ const RecipesPage = () => {
         handleClose={handleClose}
         checked={selectedRecipeIds.includes(recipe.id)}
         onCheckChange={handleCheckChange}
+        favorite={recipe.favorite}
       />
     ))}
         </Body>

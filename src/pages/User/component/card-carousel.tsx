@@ -14,6 +14,9 @@ import {
 } from "./card-styles";
 import { Icon } from "@material-ui/core";
 import { StarBorder, Star, Restaurant } from "@material-ui/icons";
+import { getAuth } from "firebase/auth";
+import api from "../../../http-client";
+
 interface CardProps {
   name: string;
   img: string;
@@ -21,7 +24,10 @@ interface CardProps {
   id: string;
   handleShow: (id: string) => void;
   handleClose: () => void;
+  favorite:boolean;
 }
+
+
 
 const CardRecipe: React.FC<CardProps> = ({
   name,
@@ -30,14 +36,41 @@ const CardRecipe: React.FC<CardProps> = ({
   id,
   handleShow,
   handleClose,
+  favorite,
 }) => {
-  const [isFav, setIsFav] = useState(true);
+  const [isFav, setIsFav] = useState(favorite);
+
+  const { currentUser } = getAuth();
+  const favoriteRecipe = async () => {
+      console.log(await currentUser?.getIdToken())
+      await api.post(`/recipes/favorite/${IDBIndex}`,{}, {
+        headers: {
+          'Authorization': await currentUser?.getIdToken()
+        }
+      })
+  }
+
+  const disfavorRecipe = async () => {
+    await api.delete(`/recipes/disfavor/${id}`, {
+      headers: {
+        'Authorization': await currentUser?.getIdToken()
+      }
+    })
+  }
   return (
     <CardContainer>
       <ImageBackground url={img}>
         <FavIcon
-          onClick={() => {
+          onClick={(e) => {
+            if(isFav){
+              disfavorRecipe()
+            }
+            else{
+              favoriteRecipe()
+            }
             setIsFav(!isFav);
+                        
+            e.stopPropagation();
           }}
         >
           {isFav ? (
