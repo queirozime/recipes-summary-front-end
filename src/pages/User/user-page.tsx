@@ -12,7 +12,7 @@ import ListCard from "../../components/ListCard/list-card-component";
 import CardRecipe from "./component/card-carousel";
 import Carousel from "./component/carousel";
 import api from "../../http-client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { List, Recipe } from "../../types";
 import { AxiosError } from "axios";
