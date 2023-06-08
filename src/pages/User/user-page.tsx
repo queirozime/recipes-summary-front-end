@@ -14,7 +14,7 @@ import Carousel from "./component/carousel";
 import api from "../../http-client";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { List, Recipe } from "../../types";
+import { List, Recipe,FavoriteRecipe } from "../../types";
 import { AxiosError } from "axios";
 import { Header } from "./user-page.styles";
 import {auth, logout} from "../../firebase";
@@ -105,17 +105,16 @@ const UserPage = () => {
       navigation("/");
       setSearchParams({ id });
     };
-
-    return favoriteRecipes?.data.map((recipe: Recipe) => {
+    return favoriteRecipes?.data.map((recipe: FavoriteRecipe) => {
       return (
         <CardRecipe
           name={recipe.title}
           img={recipe.imageUrl}
           portions={Number(recipe.portion)}
-          id={recipe.id}
+          id={recipe.recipeId}
           handleShow={handleShow}
           handleClose={handleClose}
-          favorite={recipe.favorite}
+          favorite={true}
         />
       );
     });

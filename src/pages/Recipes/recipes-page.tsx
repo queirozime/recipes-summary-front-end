@@ -25,13 +25,12 @@ const token = useMemo(() => {
 }, [auth]);
 
   const { data } = useQuery('RECIPES', async () => {
-    console.log(token)
+  
     const recipes = api.get(`/recipes/all`, {
       headers: {
         Authorization: `${await token}`,
       },
     })
-    console.log((await recipes).data)
     return recipes
     },
     {
@@ -43,6 +42,7 @@ const token = useMemo(() => {
     () => data?.data,
     [data]
   );
+  
 
   const handleClose = () => {
     navigation("/");
@@ -83,6 +83,7 @@ const token = useMemo(() => {
         </Header>
         <Body>
         {recipes?.map((recipe: Recipe, index: number) => (
+    
       <CardReceipe
         key={recipe.id}
         name={recipe.title}
