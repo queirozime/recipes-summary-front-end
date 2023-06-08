@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Header = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;

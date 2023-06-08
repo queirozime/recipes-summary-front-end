@@ -28,6 +28,7 @@ export const Body = styled.div`
 export const PageTitle = styled.div`
   font-size: 2.5rem;
   font-weight: 900;
+  color:black;
 `;
 
 export const PageSubTitle = styled.label`
