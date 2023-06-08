@@ -131,8 +131,10 @@ const UserPage = () => {
       <VerticalNavbar />
       <Container>
         <Header>
-          <PageTitle>{user?.data.name}</PageTitle>
-          <PageSubTitle>{user?.data.email}</PageSubTitle>
+          <div style={{display:"flex",flexDirection:"column"}}>
+            <PageTitle>{user?.data.name}</PageTitle>
+            <PageSubTitle>{user?.data.email}</PageSubTitle>
+          </div>
           <Button 
             onClick={handleLogout}
           >
