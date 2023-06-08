@@ -67,7 +67,6 @@ export const PortionValue = styled.div`
     justify-content: center;
     height: 100%;
     aspect-ratio: 1;
-    background-color: #F66D6D;
     border-right: 1px solid #F6F6F6;
     border-left: 1px solid #F6F6F6;
     font-size: 20px;

@@ -4,8 +4,8 @@ export const Container = styled.div`
   width: 50%;
   height: 50%;
   background: #f6f6f6;
-  padding: 1%;
-  margin-top: 0.5%;
+  padding: 2%;
+  margin-top: 5%;
 `;
 export const Title = styled.label`
   font-weight: 500;

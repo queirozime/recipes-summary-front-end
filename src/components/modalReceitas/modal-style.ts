@@ -14,7 +14,7 @@ export const Modal = styled.div`
   width: 61%;
   overflow-y: auto;
   background-color: #fff;
-  margin-top: 5%;
+  margin-top: 2%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,11 +45,11 @@ export const HeaderColumn = styled.div`
   align-items: space-around;
   justify-content: center;
   margin-top: 5%;
+  gap: 0.5rem;
 `;
 export const HeaderText = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   border-radius: 2%;
 `;
 
@@ -76,16 +76,25 @@ export const HeaderTitle = styled.p`
 
 export const Image = styled.img`
   max-width: 70%;
-  max-height: 70%;
   width: auto;
   height: auto;
 `;
+
+export const ImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-height:10%;
+`;
+
 export const ContainerInfo = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
   justify-content: space-around;
+  
 `;
 export const Ingredientes = styled.div`
   display: flex;

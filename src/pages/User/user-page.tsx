@@ -8,46 +8,52 @@ import {
   Body,
   PageSubTitle,
 } from "../Recipes/recipes-page-styles";
-
 import ListCard from "../../components/ListCard/list-card-component";
 import CardRecipe from "./component/card-carousel";
-
 import Carousel from "./component/carousel";
 import api from "../../http-client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { getAuth } from "firebase/auth";
 import { List, Recipe } from "../../types";
 import { AxiosError } from "axios";
 import { Header } from "./user-page.styles";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
-import { Index } from "firebase/firestore";
+import {auth} from "../../firebase";
+
+
 
 const UserPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [recipeUrls, setRecipeUrls] = useState<string[]>([]);
-  
-
-  const auth = getAuth();
   const navigation = useNavigate();
-  const storage = getStorage();
+  const[load,setLoad] = useState(false);
 
-  
-  const token = useMemo(() => {
+  const token =  async () =>{
     return auth.currentUser?.getIdToken();
-  }, [auth]);
+  } 
+  
+  useEffect(()=>{
+    const checkUser = () => {
+      if (auth.currentUser) {
+        setLoad(true)
+      } else {
+        setTimeout(checkUser, 500); // Tentar novamente após 500ms
+      }
+    };
+    checkUser();
 
+  },[auth.currentUser])
+  
   const { data: user } = useQuery(
     "USER",
     async () => {
       return api.get(`/users`, {
         headers: {
-          Authorization: `${await token}`,
+          Authorization: `${await token()}`,
         },
       });
     },
     {
       onError: (error) => alert(error),
+      enabled:load,
     }
   );
   const { data: favoriteRecipes } = useQuery(
@@ -55,12 +61,13 @@ const UserPage = () => {
     async () => {
       return api.get(`/recipes/favorite/all`, {
         headers: {
-          Authorization: `${await token}`,
+          Authorization: `${await token()}`,
         },
       });
     },
     {
       onError: (error) => alert(error),
+      enabled:load,
     }
   );
   // puxar as favoritas do usuário
@@ -69,7 +76,7 @@ const UserPage = () => {
     async () => {
       return api.get(`/shoplists`, {
         headers: {
-          Authorization: `${await token}`,
+          Authorization: `${await token()}`,
         },
       });
     },
@@ -78,39 +85,16 @@ const UserPage = () => {
         if(error.response?.status !== 404) 
           alert(error)
       },
+      enabled:load,
+      
     }
   );
-  const favRecipes = useMemo(
-    () => favoriteRecipes?.data,
-    [favoriteRecipes]
-  );
-
-  useEffect(() => {
-    const fetchRecipeUrls = async () => {
-      const urls: string[] = [];
-  
-      if (favRecipes) {
-        for (const recipe of favRecipes) {
-          const filePath = recipe.imageUrl;
-          const starsRef = ref(storage, filePath);
-
-          try {
-            const url = await getDownloadURL(starsRef);
-            urls.push(url);
-          } catch (error) {
-            console.error("Erro ao obter a URL pública:", error);
-          }
-        }
-      }
-  
-      setRecipeUrls(urls);
-    };
-  
-    fetchRecipeUrls();
-  }, [favRecipes]);
 
   const list = () => {
-    return lists?.data.map((list: List) => <ListCard checked={false} list={list} hasCheck={false} />);
+    return lists?.data.map((list: List) => 
+    list.favorite?
+    <ListCard checked={false} list={list} hasCheck={false} />:
+    null);
   };
   
   const recipes = () => {
@@ -122,11 +106,11 @@ const UserPage = () => {
       setSearchParams({ id });
     };
 
-    return favoriteRecipes?.data.map((recipe: Recipe,index:number) => {
+    return favoriteRecipes?.data.map((recipe: Recipe) => {
       return (
         <CardRecipe
           name={recipe.title}
-          img={recipeUrls[index]}
+          img={recipe.imageUrl}
           portions={Number(recipe.portion)}
           id={recipe.id}
           handleShow={handleShow}

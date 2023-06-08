@@ -1,8 +1,10 @@
 import React from 'react';
-import { CheckboxContainer, Container, ListDescription, ListInfo } from './list-card.styles';
+import { CheckboxContainer, Container, ListDescription, ListInfo, FavIcon } from './list-card.styles';
 import { AccessTime } from '@material-ui/icons';
 import { Checkbox } from '@material-ui/core';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Icon } from "@material-ui/core";
+import { Check, StarBorder, Star, Restaurant } from "@material-ui/icons";
 
 const ListCard: React.FC<any> = ({ list, checked, onChangeCheck, hasCheck=true }) => {
     const navigate = useNavigate();
@@ -19,12 +21,24 @@ const ListCard: React.FC<any> = ({ list, checked, onChangeCheck, hasCheck=true }
             setSearchParams({ listId: list.shoplistId })
         }}>
             {hasCheck && (
-                <CheckboxContainer onClick={(e) => e.stopPropagation()}>
-                    <Checkbox checked={checked} onChange={(e) => {
-                        onChangeCheck(list)
-                        e.stopPropagation();
-                    }} />
-                </CheckboxContainer>
+                <FavIcon
+                onClick={(e) => {
+                  onChangeCheck(list)
+                  e.stopPropagation();
+                }}
+              >
+                {checked ? (
+                  <Icon
+                    component={Star}
+                    style={{ color: "#ECDD58", fontSize: 30 }}
+                  />
+                ) : (
+                  <Icon
+                    component={StarBorder}
+                    style={{ color: "black", fontSize:30 }}
+                  />
+                )}
+              </FavIcon>
             )}
             <ListDescription>{list.title}</ListDescription>
             <ListInfo>

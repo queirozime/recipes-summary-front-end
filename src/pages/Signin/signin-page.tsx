@@ -7,6 +7,7 @@ import { Container, FormContainer, SigninPageContainer, Page, PageDescription, F
 import { Lock, Mail, Person } from "@material-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { registerWithEmailAndPassword } from "../../firebase";
 
 const SigninPage = () => {
   const navigate = useNavigate();
@@ -37,7 +38,8 @@ const SigninPage = () => {
   const handleSubmit = async (values: FormValues) => {
     try{
       if(values.password1 === values.password2) {
-        await createUserWithEmailAndPassword(auth, values.email, values.password1);
+        await registerWithEmailAndPassword(values.name, values.email, values.password1,navigate);
+        localStorage.setItem('user', JSON.stringify(auth.currentUser));
         navigate("/");
       }
       else{
