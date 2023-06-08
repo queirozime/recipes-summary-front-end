@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import { Background } from "../modalReceitas/modal-style"
 import { Recipe } from "../../types"
 import { ButtonRow, Input, InputWrapper,InputPortion, Modal, ModalContent, RecipeWrapper, RecipesList } from "./confirmation-modal.styles"
@@ -12,11 +12,19 @@ interface ConfirmationModalProps {
     onOpenChange: (v: boolean) => void
     data: Recipe[]
 }
+type RateDict = {
+    [key: string]: number;
+  };
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onOpenChange, data }) => {
     const auth = getAuth();
     const [listName, setListName] = React.useState<string>('')
     const [recipeData, setRecipeData] = React.useState<Recipe[]>()
+    const [recipesPortionsRate, setRecipePortionsRate] = React.useState<RateDict>({"-1":1})
+    
+    useEffect(()=>{
+        setRecipeData(data)
+    },[data])
     
     const token = useMemo(() => {
         return auth.currentUser?.getIdToken();
@@ -25,7 +33,15 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onOpenCha
     const handleChangePortion = (recipeId: string,portionRates: string) => {
         let portionRate = Number(portionRates)
         const newRecipes = recipeData?.map((recipe) => {
+            console.log(recipe)
             if(recipe.id === recipeId && portionRate > 0) {
+                console.log(recipesPortionsRate)
+                setRecipePortionsRate((prevState)=>({
+                    ...prevState,
+                    [recipeId]:portionRate,
+                })
+                   
+                )
                 return {
                     ...recipe,
                     portion: recipe.basePortion * portionRate
@@ -34,6 +50,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onOpenCha
             return recipe;
         });
         setRecipeData(newRecipes);
+        console.log(recipesPortionsRate)
     }
     const createList = async () => {
         return api.post('/shoplists/create', {
@@ -68,9 +85,10 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onOpenCha
                                     <RecipeWrapper>
                                         <li>{recipe.title} {" x"}</li>
                                         <InputPortion
-                                            type="numeric"
-                                            value={recipe.portion/recipe.basePortion || 1}
+                                            type="number"
+                                            value={recipesPortionsRate[recipe.id] || 1}
                                             onChange={(e) => handleChangePortion(recipe.id,(e.target.value))}
+                                            step={1}
                                         />
                                     </RecipeWrapper>
                                 ))}
