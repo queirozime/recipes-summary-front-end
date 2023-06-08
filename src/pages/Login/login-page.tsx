@@ -1,4 +1,3 @@
-import React from "react";
 import { Formik, Form} from 'formik';
 import * as Yup from 'yup';
 import { IconedPage } from "../../assets/icons";
@@ -6,7 +5,6 @@ import { Button } from "../../components/Navbar/nav-styles";
 import { Container, FormContainer, LoginPageContainer, Page, PageDescription, FormikField } from "./login-page.styles";
 import { Lock, Mail } from "@material-ui/icons";
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { logInWithEmailAndPassword } from "../../firebase";
 import {auth} from "../../firebase";
 
@@ -32,7 +30,7 @@ const LoginPage = () => {
     try{
       await logInWithEmailAndPassword(values);
       localStorage.setItem('user', JSON.stringify(auth.currentUser));
-      navigate("/user");
+      navigate("/");
     }catch(e) {
       alert("Erro ao fazer login");
     }

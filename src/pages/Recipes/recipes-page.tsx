@@ -7,9 +7,8 @@ import { Container, Header, PageTitle, Body } from "./recipes-page-styles";
 import { useQuery } from "react-query";
 import api from "../../http-client";
 import { Recipe } from "../../types";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import ConfirmationModal from "../../components/ConfirmationModal/confirmation-modal";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
 
