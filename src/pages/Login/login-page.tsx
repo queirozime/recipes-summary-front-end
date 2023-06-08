@@ -7,10 +7,10 @@ import { Container, FormContainer, LoginPageContainer, Page, PageDescription, Fo
 import { Lock, Mail } from "@material-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
-
+import { logInWithEmailAndPassword } from "../../firebase";
+import {auth} from "../../firebase";
 
 const LoginPage = () => {
-  const auth = getAuth();
 
   interface FormValues {
     email: string;
@@ -30,8 +30,9 @@ const LoginPage = () => {
 
   const handleSubmit = async (values: FormValues) => {
     try{
-      await signInWithEmailAndPassword(auth, values.email, values.password);
-      navigate("/");
+      await logInWithEmailAndPassword(values);
+      localStorage.setItem('user', JSON.stringify(auth.currentUser));
+      navigate("/user");
     }catch(e) {
       alert("Erro ao fazer login");
     }
