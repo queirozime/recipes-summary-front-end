@@ -110,7 +110,7 @@ const UserPage = () => {
         <CardRecipe
           name={recipe.title}
           img={recipe.imageUrl}
-          portions={Number(recipe.portion)}
+          portions={Number(recipe.basePortion)}
           id={recipe.recipeId}
           handleShow={handleShow}
           handleClose={handleClose}
