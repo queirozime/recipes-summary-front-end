@@ -91,7 +91,10 @@ const UserPage = () => {
   );
 
   const list = () => {
-    return lists?.data.map((list: List) => <ListCard checked={false} list={list} hasCheck={false} />);
+    return lists?.data.map((list: List) => 
+    list.favorite?
+    <ListCard checked={false} list={list} hasCheck={false} />:
+    null);
   };
   
   const recipes = () => {
