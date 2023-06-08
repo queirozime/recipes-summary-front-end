@@ -21,6 +21,8 @@ import {
 import ExportCSV from "../../utils/csv-util";
 import api from "../../http-client"
 import { Ingredient, List, Recipe as RecipeType } from "../../types";
+import { Icon } from "@material-ui/core";
+import { Delete } from "@material-ui/icons";
 
 const ListView = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -38,6 +40,11 @@ const ListView = () => {
         return res.data;
     }
 
+    const deleteShoplist = async () => {
+        await api.delete(`/shoplists/${listId}`);
+        navigate('/lists')
+    }
+
     const { data } = useQuery(['LIST'], fetch,
         {  
             optimisticResults: false,
@@ -46,6 +53,7 @@ const ListView = () => {
             onError: (error) => alert(error),
         }
     );
+    
     const [currList, setList] = useState<List>(data);
     useEffect(()=>{
         setList(data)
@@ -128,6 +136,9 @@ const ListView = () => {
             <Container>
                 <Header>
                     <PageTitle>{`${data?.title}`}</PageTitle>
+                    <button style={{backgroundColor:"white",borderWidth:0, marginLeft:"1%",cursor: "pointer", marginTop:"1%"}} onClick={deleteShoplist}>
+                        <Icon component={Delete} style={{ color: "red", fontSize: 35 }} />
+                    </button>
                 </Header>
                 <Body>
                     <SummaryContainer>
@@ -189,10 +200,7 @@ const ListView = () => {
                                     let actualQty = getQuantity(item.name,item.unit) 
                                     return (<tr key={index}>
                                         <td>{item.name}</td>
-                                        {isEdit?
                                         <td>{actualQty? actualQty:"-"}</td>
-                                        :<td>{item.qty?item.qty:"-"}</td>
-                                        }
                                         <td>{item.unit}</td>
                                     </tr>)
                                     })}

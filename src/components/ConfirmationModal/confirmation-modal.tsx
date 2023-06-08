@@ -23,7 +23,13 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onOpenCha
     const [recipesPortionsRate, setRecipePortionsRate] = React.useState<RateDict>({"-1":1})
     
     useEffect(()=>{
-        setRecipeData(data)
+        const newRecipes = data?.map((recipe) => {
+            return {
+                ...recipe,
+                portion: recipe.basePortion 
+            }
+        });
+        setRecipeData(newRecipes)
     },[data])
     
     const token = useMemo(() => {
@@ -33,9 +39,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onOpenCha
     const handleChangePortion = (recipeId: string,portionRates: string) => {
         let portionRate = Number(portionRates)
         const newRecipes = recipeData?.map((recipe) => {
-            console.log(recipe)
             if(recipe.id === recipeId && portionRate > 0) {
-                console.log(recipesPortionsRate)
                 setRecipePortionsRate((prevState)=>({
                     ...prevState,
                     [recipeId]:portionRate,
@@ -50,7 +54,6 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onOpenCha
             return recipe;
         });
         setRecipeData(newRecipes);
-        console.log(recipesPortionsRate)
     }
     const createList = async () => {
         return api.post('/shoplists/create', {
@@ -68,6 +71,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onOpenCha
     )
 
     const handleCreateList = async () => {
+        
         await mutateAsync();
         onOpenChange(!isOpen);
     }
