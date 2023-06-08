@@ -19,3 +19,4 @@ export interface List {
     recipes: Recipe[];
     ingredients: Ingredient[];
 }
+

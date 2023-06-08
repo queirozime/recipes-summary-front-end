@@ -11,16 +11,16 @@ import { auth } from "../../firebase";
 const ListsPage = () => {
     interface List {
         name: string;
-        id: string;
+        shoplistId: string;
         recipes: any;
     }
     const [load,setLoad] = useState(false);
     const [selectedListsIds, setSelectedListsIds] = useState<string[]>([]);
     const checkList = (list: List) => {
-        if(selectedListsIds.includes(list.id)) {
-            setSelectedListsIds(selectedListsIds.filter((item) => item !== list.id));
+        if(selectedListsIds.includes(list.shoplistId)) {
+            setSelectedListsIds(selectedListsIds.filter((item) => item !== list.shoplistId));
         } else {
-            setSelectedListsIds([...selectedListsIds, list.id]);
+            setSelectedListsIds([...selectedListsIds, list.shoplistId]);
         }
     }
 
@@ -39,7 +39,7 @@ const ListsPage = () => {
         checkUser();
     
       },[auth.currentUser])
-    
+   
 
     const { data } = useQuery('LISTS', async () => {
         return api.get(`/shoplists`, {
@@ -54,7 +54,6 @@ const ListsPage = () => {
         }
     );
     const lists = data?.data || [];
-
     return (
         <NavWrapper>
             <VerticalNavbar />
@@ -63,9 +62,9 @@ const ListsPage = () => {
                     <PageTitle>Listas</PageTitle>
                 </Header>
                 <Body style={{ gap: '5rem' }}>
-                    {lists.map((list: { id: string; }) => (
+                    {lists.map((list: { shoplistId: string; }) => (
                         <ListCard 
-                            checked={selectedListsIds.includes(list.id)} 
+                            checked={selectedListsIds.includes(list.shoplistId)} 
                             list={list} 
                             onChangeCheck={checkList}
                         />

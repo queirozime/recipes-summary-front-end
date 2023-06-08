@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { NavWrapper } from "../../components/Navbar/nav-styles";
@@ -21,9 +21,12 @@ import {
 import ExportCSV from "../../utils/csv-util";
 import api from "../../http-client"
 import { Ingredient, List, Recipe as RecipeType } from "../../types";
+import { Icon } from "@material-ui/core";
+import { Delete } from "@material-ui/icons";
 
 const ListView = () => {
     const [searchParams, setSearchParams] = useSearchParams();
+    const [isEdit,setIsEdit] = useState(false)
     const navigate = useNavigate();
     const listId = searchParams.get('listId');
     const initialData: List = {
@@ -37,6 +40,11 @@ const ListView = () => {
         return res.data;
     }
 
+    const deleteShoplist = async () => {
+        await api.delete(`/shoplists/${listId}`);
+        navigate('/lists')
+    }
+
     const { data } = useQuery(['LIST'], fetch,
         {  
             optimisticResults: false,
@@ -45,16 +53,42 @@ const ListView = () => {
             onError: (error) => alert(error),
         }
     );
+    
     const [currList, setList] = useState<List>(data);
+    useEffect(()=>{
+        setList(data)
+    },[data])
 
+    const getQuantity = (name: string , unit: string)=>{
+        let total = 0.0
+        for (let recipe of currList?.recipes){
+            for(let ingredient of recipe?.ingredients){
+                if(ingredient.name === name && ingredient.unit === unit){
+                    let portion = recipe.portion 
+                    total += ingredient.qty  * ( portion/recipe.basePortion) 
+                }
+            }
+
+        }
+        return total 
+    }
+
+    const updateList = async (id:string):Promise<List> => {
+        let request = await api.patch(`/shoplists/${id}`, {
+            recipes: currList['recipes'],
+        })
+        return request.data
+    }
     const csvData = currList?.ingredients?.map((item) => {
+        let actualQty = getQuantity(item.name,item.unit) 
+        
         return [
             item.name,
-            item.qty,
+            actualQty,
             item.unit
         ]
     });
-
+    
     const handleAddPortion = (recipeId: string) => {
         const newRecipes = currList?.recipes?.map((recipe) => {
             if(recipe.id === recipeId) {
@@ -86,22 +120,13 @@ const ListView = () => {
             recipes: newRecipes
         });
     }
-    const getQuantity = (name: string , unit: string)=>{
-        let total = 0.0
-        for (let recipe of currList?.recipes){
-            for(let ingredient of recipe?.ingredients){
-                if(ingredient.name === name && ingredient.unit === unit){
-                    let portion = recipe.portion || 1
-                    total += ingredient.qty  * ( portion/recipe.basePortion  - 1 )
-                }
-            }
-
+    
+    const handleSubmitList =async () => {
+        if(isEdit){
+            let newList = await updateList(data.shoplistId)
+            setList(newList)
         }
-        return total 
-    }
-    const handleSubmitList = () => {
-        console.log(currList);
-        navigate('/lists')
+        setIsEdit(!isEdit)
     }
     
 
@@ -111,6 +136,9 @@ const ListView = () => {
             <Container>
                 <Header>
                     <PageTitle>{`${data?.title}`}</PageTitle>
+                    <button style={{backgroundColor:"white",borderWidth:0, marginLeft:"1%",cursor: "pointer", marginTop:"1%"}} onClick={deleteShoplist}>
+                        <Icon component={Delete} style={{ color: "red", fontSize: 35 }} />
+                    </button>
                 </Header>
                 <Body>
                     <SummaryContainer>
@@ -118,7 +146,7 @@ const ListView = () => {
                             <div style={{ fontSize: '1.5rem' }}>
                                 Receitas Selecionadas
                             </div>
-                            {data?.recipes?.map((recipe: RecipeType) => (
+                            {currList?.recipes?.map((recipe: RecipeType) => (
                                 <Recipe>{recipe.title}</Recipe>
                             ))}
                         </RecipeItems>
@@ -126,26 +154,37 @@ const ListView = () => {
                             <div style={{ fontSize: '1.5rem' }}>
                                 Porções
                             </div>
-                            {data?.recipes?.map((recipe: RecipeType) => (
-                                <PortionsWrapper>
-                                    <Button 
-                                        style={{ 
-                                                borderTopLeftRadius: '0.5rem', 
-                                                borderBottomLeftRadius: '0.5rem' 
-                                            }}
-                                        onClick={() => handleRemovePortion(recipe.id)}
-                                    >-</Button>
-                                    <PortionValue>{recipe.portion}</PortionValue>
-                                    <Button style={{ 
-                                        borderTopRightRadius: '0.5rem', 
-                                        borderBottomRightRadius: '0.5rem' 
-                                        }}
-                                        onClick={() => handleAddPortion(recipe.id)}
-                                    >+</Button>
-                                </PortionsWrapper>
-                            ))}
+                            {currList?.recipes?.map((recipe: RecipeType) => {
+                                return(
+                                    isEdit?
+                                        <PortionsWrapper>
+                                            <Button 
+                                                style={{ 
+                                                        borderTopLeftRadius: '0.5rem', 
+                                                        borderBottomLeftRadius: '0.5rem' 
+                                                    }}
+                                                onClick={() => handleRemovePortion(recipe.id)}
+                                            >-</Button>
+                                            <PortionValue style={{backgroundColor: isEdit ? '#F66D6D' : ""}}>{recipe.portion}</PortionValue>
+                                            <Button style={{ 
+                                                borderTopRightRadius: '0.5rem', 
+                                                borderBottomRightRadius: '0.5rem' 
+                                                }}
+                                                onClick={() => handleAddPortion(recipe.id)}
+                                            >+</Button>
+                                        </PortionsWrapper>
+                                    :<PortionValue>{recipe.portion}</PortionValue>
+                            )})}
                         </PortionsItems>
                     </SummaryContainer>
+                    <ButtonsContainer>
+                        <ExportCSV 
+                            data={csvData} 
+                            headers={['Ingrediente', 'Quantidade', 'Unidade']} 
+                            filename={`${data?.title}.csv`}
+                        />
+                        <MainButton onClick={handleSubmitList}>{isEdit?"Salvar":"Editar"}</MainButton>
+                    </ButtonsContainer>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                         <TableContainer>
                             <StyledTable>
@@ -157,11 +196,11 @@ const ListView = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data?.ingredients?.map((item: Ingredient, index: number) => {
-                                    let offQty = getQuantity(item.name,item.unit) 
+                                    {currList?.ingredients?.map((item: Ingredient, index: number) => {
+                                    let actualQty = getQuantity(item.name,item.unit) 
                                     return (<tr key={index}>
                                         <td>{item.name}</td>
-                                        <td>{item.qty?item.qty + offQty:null}</td>
+                                        <td>{actualQty? actualQty:"-"}</td>
                                         <td>{item.unit}</td>
                                     </tr>)
                                     })}
@@ -169,14 +208,7 @@ const ListView = () => {
                             </StyledTable>
                         </TableContainer>
                     </div>
-                    <ButtonsContainer>
-                        <ExportCSV 
-                            data={csvData} 
-                            headers={['Ingrediente', 'Quantidade', 'Unidade']} 
-                            filename={`${data?.title}.csv`}
-                        />
-                        <MainButton onClick={handleSubmitList}>Salvar</MainButton>
-                    </ButtonsContainer>
+                    
                 </Body>
             </Container>
         </NavWrapper>

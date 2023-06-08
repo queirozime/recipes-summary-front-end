@@ -59,8 +59,8 @@ export const InputWrapper = styled.div`
 `;
 
 export const InputPortion = styled.input`
-  width: 1%;
-  height: 2rem;
+  width: 10%;
+  height: 1rem;
   border-radius: 5px;
   border: 1px solid #ccc;
   padding: 0.5rem;

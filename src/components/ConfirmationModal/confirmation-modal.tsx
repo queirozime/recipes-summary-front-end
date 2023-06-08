@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import { Background } from "../modalReceitas/modal-style"
 import { Recipe } from "../../types"
 import { ButtonRow, Input, InputWrapper,InputPortion, Modal, ModalContent, RecipeWrapper, RecipesList } from "./confirmation-modal.styles"
@@ -12,11 +12,25 @@ interface ConfirmationModalProps {
     onOpenChange: (v: boolean) => void
     data: Recipe[]
 }
+type RateDict = {
+    [key: string]: number;
+  };
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onOpenChange, data }) => {
     const auth = getAuth();
     const [listName, setListName] = React.useState<string>('')
     const [recipeData, setRecipeData] = React.useState<Recipe[]>()
+    const [recipesPortionsRate, setRecipePortionsRate] = React.useState<RateDict>({"-1":1})
+    
+    useEffect(()=>{
+        const newRecipes = data?.map((recipe) => {
+            return {
+                ...recipe,
+                portion: recipe.basePortion 
+            }
+        });
+        setRecipeData(newRecipes)
+    },[data])
     
     const token = useMemo(() => {
         return auth.currentUser?.getIdToken();
@@ -26,6 +40,12 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onOpenCha
         let portionRate = Number(portionRates)
         const newRecipes = recipeData?.map((recipe) => {
             if(recipe.id === recipeId && portionRate > 0) {
+                setRecipePortionsRate((prevState)=>({
+                    ...prevState,
+                    [recipeId]:portionRate,
+                })
+                   
+                )
                 return {
                     ...recipe,
                     portion: recipe.basePortion * portionRate
@@ -51,6 +71,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onOpenCha
     )
 
     const handleCreateList = async () => {
+        
         await mutateAsync();
         onOpenChange(!isOpen);
     }
@@ -68,9 +89,10 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onOpenCha
                                     <RecipeWrapper>
                                         <li>{recipe.title} {" x"}</li>
                                         <InputPortion
-                                            type="numeric"
-                                            value={recipe.portion/recipe.basePortion || 1}
+                                            type="number"
+                                            value={recipesPortionsRate[recipe.id] || 1}
                                             onChange={(e) => handleChangePortion(recipe.id,(e.target.value))}
+                                            step={1}
                                         />
                                     </RecipeWrapper>
                                 ))}
