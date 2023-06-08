@@ -4,7 +4,7 @@ import { AccessTime } from '@material-ui/icons';
 import { Checkbox } from '@material-ui/core';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Icon } from "@material-ui/core";
-import { Check, StarBorder, Star, Restaurant } from "@material-ui/icons";
+import { Check, StarBorder, Star, Create, Search } from "@material-ui/icons";
 
 const ListCard: React.FC<any> = ({ list, checked, onChangeCheck, hasCheck=true }) => {
     const navigate = useNavigate();
@@ -20,6 +20,7 @@ const ListCard: React.FC<any> = ({ list, checked, onChangeCheck, hasCheck=true }
             navigate('/list-view')
             setSearchParams({ listId: list.shoplistId })
         }}>
+          
             {hasCheck && (
                 <FavIcon
                 onClick={(e) => {
@@ -41,7 +42,12 @@ const ListCard: React.FC<any> = ({ list, checked, onChangeCheck, hasCheck=true }
               </FavIcon>
             )}
             <ListDescription>{list.title}</ListDescription>
+            <Icon
+                    component={Search}
+                    style={{ color: "black", fontSize:30 }}
+            />
             <ListInfo>
+            
                 <AccessTime />
                 {`${day}/${month+1}/${year}`}
             </ListInfo>

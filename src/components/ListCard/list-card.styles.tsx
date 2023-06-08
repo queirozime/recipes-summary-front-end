@@ -3,15 +3,19 @@ import styled from "styled-components";
 export const Container = styled.div`
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background: #F6F6F6;
     border-radius: 10px;
     max-width: 200px;
-    padding: 1rem;
     cursor: pointer;
     &: hover {
         filter: brightness(0.9);
     }
     aspect-ratio: 1/1;
+    border: 0.1rem solid #000;
+    margin-left: 1rem;
+
 `;
 
 export const ListDescription = styled.div`
