@@ -39,7 +39,7 @@ const CardRecipe: React.FC<CardProps> = ({
   handleClose,
   checked,
   onCheckChange,
-  favorite
+  favorite,
 }) => {
   const [isFav, setIsFav] = useState(favorite);
   const frase = name;
